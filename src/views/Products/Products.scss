@@ -1,0 +1,29 @@
+.products {
+  padding: 2rem 0;
+  .products__header {
+    text-align: center;
+    .products__title {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+    .products__subtitle {
+      font-size: 1.8rem;
+      margin-bottom: 2rem;
+    }
+  }
+  .products__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+  }
+
+  @media (max-width: 1024px) {
+    .products__title {
+      font-size: 2.5rem;
+    }
+    .products__subtitle {
+      font-size: 1.6rem;
+    }
+  }
+}
