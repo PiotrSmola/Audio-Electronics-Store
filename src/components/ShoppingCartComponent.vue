@@ -2,7 +2,7 @@
   <div class="shopping-cart" :class="{ 'shopping-cart--active': active }">
     <h2 class="shopping-cart__title">Your Cart</h2>
     <ul class="shopping-cart__items">
-      <li v-for="item in cart" :key="item.id" class="shopping-cart__item">
+      <li v-for="item in cartItems" :key="item.id" class="shopping-cart__item">
         <img :src="item.imgSrc" :alt="item.name" class="shopping-cart__img" />
         <span class="shopping-cart__name">{{ item.name }}</span>
         <div class="shopping-cart__quantity">
@@ -23,17 +23,24 @@
 </template>
 
 <script>
+import { useCartStore } from '@/stores/cartStore'
+
 export default {
   name: 'ShoppingCartComponent',
   data() {
     return {
       active: true,
-      cart: JSON.parse(localStorage.getItem('CART')) || [],
     }
   },
   computed: {
+    cartStore() {
+      return useCartStore()
+    },
+    cartItems() {
+      return this.cartStore.items
+    },
     subtotal() {
-      return this.cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
+      return this.cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
     },
   },
   methods: {
@@ -42,19 +49,16 @@ export default {
       this.$emit('close')
     },
     changeQuantity(action, item) {
+      const cartStore = useCartStore()
       if (action === 'plus') {
-        item.quantity++
+        cartStore.updateQuantity(item.id, item.quantity + 1)
       } else if (action === 'minus' && item.quantity > 1) {
-        item.quantity--
+        cartStore.updateQuantity(item.id, item.quantity - 1)
       }
-      this.updateCart()
     },
     removeItem(id) {
-      this.cart = this.cart.filter((item) => item.id !== id)
-      this.updateCart()
-    },
-    updateCart() {
-      localStorage.setItem('CART', JSON.stringify(this.cart))
+      const cartStore = useCartStore()
+      cartStore.removeItem(id)
     },
     formatPrice(value) {
       return `$${value.toFixed(2)}`

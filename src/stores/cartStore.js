@@ -17,6 +17,20 @@ export const useCartStore = defineStore('cart', {
       } else {
         this.items.push({ ...product, quantity: 1 })
       }
+      this.saveToLocalStorage()
+    },
+    updateQuantity(productId, newQuantity) {
+      const index = this.items.findIndex((item) => item.id === productId)
+      if (index !== -1) {
+        this.items[index].quantity = newQuantity
+        this.saveToLocalStorage()
+      }
+    },
+    removeItem(productId) {
+      this.items = this.items.filter((item) => item.id !== productId)
+      this.saveToLocalStorage()
+    },
+    saveToLocalStorage() {
       localStorage.setItem('CART', JSON.stringify(this.items))
     },
   },
