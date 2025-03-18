@@ -6,9 +6,9 @@
         <span class="footer__date">{{ currentYear }}</span>
       </p>
       <div class="footer__icons">
-        <a href="#" class="footer__icon"><i class="fa-brands fa-facebook-f"></i></a>
-        <a href="#" class="footer__icon"><i class="fa-brands fa-instagram"></i></a>
-        <a href="#" class="footer__icon"><i class="fa-brands fa-twitter"></i></a>
+        <a href="#" class="footer__icon"><v-icon>mdi-facebook</v-icon></a>
+        <a href="#" class="footer__icon"><v-icon>mdi-instagram</v-icon></a>
+        <a href="#" class="footer__icon"><v-icon>mdi-twitter</v-icon></a>
       </div>
     </div>
   </footer>
@@ -32,6 +32,7 @@ export default {
   background-color: #141414;
   color: #fff;
   padding: 2rem 0;
+  font-size: 1.5rem;
   .footer__body {
     display: flex;
     flex-direction: column;
@@ -43,10 +44,10 @@ export default {
     gap: 1rem;
     a {
       color: #fff;
-      font-size: 2rem;
+      font-size: 1.5rem;
       transition: color 0.3s;
       &:hover {
-        color: #be9c79;
+        color: #4c018e;
       }
     }
   }

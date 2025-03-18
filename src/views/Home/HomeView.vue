@@ -23,7 +23,9 @@
               <h3 class="about__title">Passion for Quality Sound</h3>
               <p class="about__text">
                 We bring you the best in audio electronics – from high‑fidelity amplifiers to
-                cutting‑edge wireless speakers.
+                cutting‑edge wireless speakers. Our carefully selected range combines innovative
+                technology with superior craftsmanship to deliver an unparalleled listening
+                experience.
               </p>
             </div>
             <a class="about__btn" href="about.html">Learn More</a>
