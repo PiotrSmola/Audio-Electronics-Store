@@ -1,6 +1,5 @@
 <template>
   <v-app>
-    <!-- Miejsce, gdzie router będzie renderował poszczególne widoki -->
     <router-view />
   </v-app>
 </template>
@@ -12,5 +11,10 @@ export default {
 </script>
 
 <style>
-/* Globalne style, jeśli potrzebne */
+#app {
+  display: flex;
+}
+html {
+  scroll-behavior: smooth;
+}
 </style>

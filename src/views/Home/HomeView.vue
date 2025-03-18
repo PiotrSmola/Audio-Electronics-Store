@@ -7,7 +7,7 @@
         <div class="header__body container">
           <p class="header__text">Exclusive Deals on Premium Audio Equipment</p>
           <h1 class="header__heading">Experience Superior Sound</h1>
-          <a class="header__link" href="products.html">Shop Now</a>
+          <a class="header__link" href="/products">Shop Now</a>
         </div>
       </div>
     </header>
