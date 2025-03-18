@@ -1,13 +1,13 @@
 <template>
   <div>
-    <NavBar />
+    <NavbarComponent @toggle-cart="toggleCart" />
     <main class="products">
       <section class="products__header container">
-        <h1 class="products__title">Produkty</h1>
-        <p class="products__subtitle">Znajdź idealny sprzęt audio dla siebie</p>
+        <h1 class="products__title">Products</h1>
+        <p class="products__subtitle">Find the perfect audio equipment for you</p>
       </section>
       <section class="products__list container">
-        <ProductCard
+        <ProductCardComponent
           v-for="product in products"
           :key="product.id"
           :product="product"
@@ -15,8 +15,8 @@
         />
       </section>
     </main>
-    <Footer />
-    <ShoppingCart />
+    <FooterComponent />
+    <ShoppingCartComponent v-if="cartVisible" @close="cartVisible = false" />
   </div>
 </template>
 
@@ -25,48 +25,57 @@ import NavbarComponent from '@/components/NavbarComponent.vue'
 import FooterComponent from '@/components/FooterComponent.vue'
 import ShoppingCartComponent from '@/components/ShoppingCartComponent.vue'
 import ProductCardComponent from '@/components/ProductCardComponent.vue'
+import { useCartStore } from '@/stores/cartStore'
+
+// Import images using ES modules not using require
+import product1 from '@/assets/img/product1.jpg'
+import product2 from '@/assets/img/product2.jpg'
+import product3 from '@/assets/img/product3.jpg'
 
 export default {
   name: 'ProductsView',
-  components: { NavbarComponent, FooterComponent, ShoppingCartComponent, ProductCardComponent },
+  components: {
+    NavbarComponent,
+    FooterComponent,
+    ShoppingCartComponent,
+    ProductCardComponent,
+  },
   data() {
     return {
       products: [
         {
           id: 1,
-          name: 'Wzmacniacz audio',
+          name: 'Amplifier X100',
           price: 299.99,
-          imgSrc: require('@/assets/img/products/amplifier.jpg'),
-          description: 'Wysokiej klasy wzmacniacz audio.',
+          imgSrc: product1,
+          description: 'High-end audio amplifier.',
         },
         {
           id: 2,
-          name: 'Głośnik Bluetooth',
+          name: 'Bluetooth Speaker',
           price: 149.99,
-          imgSrc: require('@/assets/img/products/bluetooth_speaker.jpg'),
-          description: 'Przenośny głośnik o doskonałej jakości dźwięku.',
+          imgSrc: product2,
+          description: 'Portable speaker with excellent sound quality.',
         },
         {
           id: 3,
-          name: 'Słuchawki studyjne',
+          name: 'Wireless Headphones',
           price: 199.99,
-          imgSrc: require('@/assets/img/products/studio_headphones.jpg'),
-          description: 'Słuchawki dla profesjonalistów.',
+          imgSrc: product3,
+          description: 'Wireless headphones for professionals.',
         },
       ],
+      cartVisible: false,
     }
   },
   methods: {
     addToCart(product) {
-      let cart = JSON.parse(localStorage.getItem('CART')) || []
-      const exists = cart.find((item) => item.id === product.id)
-      if (exists) {
-        exists.quantity++
-      } else {
-        cart.push({ ...product, quantity: 1 })
-      }
-      localStorage.setItem('CART', JSON.stringify(cart))
-      alert(`Dodano ${product.name} do koszyka!`)
+      const cartStore = useCartStore()
+      cartStore.addProduct(product)
+      alert(`Added ${product.name} to cart!`)
+    },
+    toggleCart() {
+      this.cartVisible = !this.cartVisible
     },
   },
 }

@@ -1,15 +1,15 @@
 <template>
   <header class="navbar">
     <div class="navbar__container container">
-      <a href="index.html" class="navbar__logo">
+      <router-link to="/" class="navbar__logo">
         Audio Electronics
         <img src="@/assets/img/logo-audio.png" alt="Audio Electronics Logo" class="navbar__img" />
-      </a>
+      </router-link>
       <nav :class="{ 'navbar__menu--active': menuActive }" class="navbar__menu">
-        <a href="index.html" class="navbar__link">Home</a>
-        <a href="about.html" class="navbar__link">About</a>
-        <a href="products.html" class="navbar__link">Products</a>
-        <a href="contact.html" class="navbar__link">Contact</a>
+        <router-link to="/" class="navbar__link">Home</router-link>
+        <router-link to="/about" class="navbar__link">About</router-link>
+        <router-link to="/products" class="navbar__link">Products</router-link>
+        <router-link to="/contact" class="navbar__link">Contact</router-link>
       </nav>
       <div class="navbar__icons">
         <v-btn icon class="navbar__search-btn" @click="openSearch">
@@ -44,6 +44,9 @@
 </template>
 
 <script>
+import { useCartStore } from '@/stores/cartStore'
+
+// Example image imports for search
 import product1 from '@/assets/img/product1.jpg'
 import product2 from '@/assets/img/product2.jpg'
 import product3 from '@/assets/img/product3.jpg'
@@ -55,34 +58,37 @@ export default {
       menuActive: false,
       searchActive: false,
       searchQuery: '',
-      // Example search items
       searchItems: [
         {
           id: 1,
           name: 'Amplifier X100',
           price: 299.99,
-          link: 'products.html#amplifier-x100',
+          link: '/products#amplifier-x100',
           img: product1,
         },
         {
           id: 2,
           name: 'Wireless Headphones',
           price: 199.99,
-          link: 'products.html#wireless-headphones',
+          link: '/products#wireless-headphones',
           img: product2,
         },
         {
           id: 3,
           name: 'Bluetooth Speaker',
           price: 149.99,
-          link: 'products.html#bluetooth-speaker',
+          link: '/products#bluetooth-speaker',
           img: product3,
         },
       ],
-      cartQuantity: 0,
     }
   },
   computed: {
+    // Use Pinia to calculate the total number of products in the cart
+    cartQuantity() {
+      const cartStore = useCartStore()
+      return cartStore.cartQuantity
+    },
     filteredSearchItems() {
       if (!this.searchQuery) return []
       return this.searchItems.filter((item) =>
@@ -91,19 +97,12 @@ export default {
     },
   },
   methods: {
-    toggleMenu() {
-      this.menuActive = !this.menuActive
-    },
     openSearch() {
       this.searchActive = true
     },
     closeSearch() {
       this.searchActive = false
     },
-  },
-  mounted() {
-    const cart = JSON.parse(localStorage.getItem('CART')) || []
-    this.cartQuantity = cart.reduce((sum, item) => sum + item.quantity, 0)
   },
 }
 </script>
@@ -136,7 +135,7 @@ export default {
     .navbar__link {
       color: #fff;
       text-decoration: none;
-      font-size: 1.8rem;
+      font-size: 1.7rem;
       transition: color 0.3s;
       &:hover {
         color: #be9c79;

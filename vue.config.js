@@ -1,5 +1,5 @@
 // vue.config.js
-module.exports = {
+export default {
   pages: {
     home: {
       entry: 'src/views/Home/main.js',

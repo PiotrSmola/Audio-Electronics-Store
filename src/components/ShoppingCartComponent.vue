@@ -6,13 +6,13 @@
         <img :src="item.imgSrc" :alt="item.name" class="shopping-cart__img" />
         <span class="shopping-cart__name">{{ item.name }}</span>
         <div class="shopping-cart__quantity">
-          <button @click="changeQuantity('minus', item)">-</button>
-          <span>{{ item.quantity }}</span>
-          <button @click="changeQuantity('plus', item)">+</button>
+          <button class="changeQuantity" @click="changeQuantity('minus', item)">-</button>
+          <span class="item_quantity">{{ item.quantity }}</span>
+          <button class="changeQuantity" @click="changeQuantity('plus', item)">+</button>
         </div>
         <span class="shopping-cart__price">{{ formatPrice(item.price * item.quantity) }}</span>
         <button class="shopping-cart__remove" @click="removeItem(item.id)">
-          <i class="fa-solid fa-trash"></i>
+          <v-icon>mdi-trash-can</v-icon>
         </button>
       </li>
     </ul>
@@ -73,10 +73,10 @@ export default {
   position: fixed;
   top: 0;
   right: 0;
-  width: 400px;
+  width: 500px;
   background-color: #fff;
   box-shadow: -2px 0 5px rgba(0, 0, 0, 0.3);
-  padding: 1rem;
+  padding: 1.2rem;
   transform: translateX(100%);
   transition: transform 0.3s ease;
 
@@ -92,7 +92,8 @@ export default {
   &__items {
     list-style: none;
     max-height: 400px;
-    overflow-y: auto;
+    overflow-y: none;
+    width: 100%;
 
     li {
       display: flex;
@@ -100,6 +101,13 @@ export default {
       justify-content: space-between;
       margin-bottom: 1rem;
     }
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+    width: 100%;
   }
 
   &__img {
@@ -125,9 +133,19 @@ export default {
     }
   }
 
+  .item_quantity {
+    margin: 0 0.5rem;
+  }
+
+  .changeQuantity {
+    font-size: 1rem;
+    width: 30px;
+    height: 30px;
+  }
+
   &__price {
-    font-size: 1.6rem;
-    margin: 0 1rem;
+    font-size: 1.2rem;
+    margin-left: 1rem;
   }
 
   &__remove {
@@ -135,20 +153,24 @@ export default {
     border: none;
     cursor: pointer;
     color: red;
+    font-size: 1.5rem;
+    margin-left: 0.8rem;
   }
 
   &__subtotal {
-    font-size: 1.8rem;
+    font-size: 1.6rem;
     text-align: right;
     margin-top: 1rem;
+    font-weight: bold;
   }
 
   &__checkout,
   &__close {
     width: 100%;
-    padding: 1rem;
+    padding: 0.7rem;
     margin-top: 1rem;
     background-color: #1976d2;
+    font-size: 1.5rem;
     color: #fff;
     border: none;
     cursor: pointer;
