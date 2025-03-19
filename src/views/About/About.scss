@@ -1,33 +1,174 @@
-.about {
-  padding: 2rem 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.header-about {
+  &__bgc {
+    height: 80vh;
+    background: url('@/assets/img/aboutBackground.jpg') rgba(0, 0, 0, 0.7);
+    background-blend-mode: darken;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5rem;
 
-  .about__section {
-    text-align: center;
-    .about__title {
-      font-size: 3rem;
-      margin-bottom: 1rem;
-    }
-    .about__description {
-      font-size: 1.8rem;
-      margin-bottom: 2rem;
-    }
-    .about__image {
-      width: 100%;
-      max-width: 600px;
-      margin: 0 auto;
-      display: block;
+    @media (max-width: 768px) {
+      height: 40vh;
     }
   }
 
-  @media (max-width: 1024px) {
-    .about__title {
-      font-size: 2.5rem;
+  &__heading {
+    padding: 0 1rem;
+    color: #ffffff;
+    font-size: 4.5rem;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 2px;
+
+    @media (max-width: 768px) {
+      font-size: 3rem;
     }
-    .about__description {
-      font-size: 1.6rem;
+  }
+}
+
+.about {
+  padding: 2rem 0 6rem;
+
+  &__main-title {
+    font-size: 3.5rem;
+    font-weight: 600;
+    margin-bottom: 4rem;
+    position: relative;
+
+    &:after {
+      content: '';
+      position: absolute;
+      bottom: -1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 8rem;
+      height: 3px;
+      background-color: #be9c79;
     }
+  }
+
+  &__section {
+    margin-bottom: 8rem;
+
+    @media (max-width: 768px) {
+      margin-bottom: 4rem;
+    }
+  }
+
+  &__card {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px !important;
+    overflow: hidden;
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+
+    &:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+    }
+  }
+
+  &__title {
+    font-size: 2.4rem !important;
+    font-weight: 600 !important;
+    color: #2c3e50;
+    padding-bottom: 1rem;
+    position: relative;
+
+    &:after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 4rem;
+      height: 2px;
+      background-color: #be9c79;
+    }
+  }
+
+  &__text {
+    font-size: 1.6rem;
+    line-height: 1.7;
+    color: #333;
+  }
+
+  &__image {
+    border-radius: 8px;
+    transition: transform 0.5s ease;
+
+    &:hover {
+      transform: scale(1.02);
+    }
+  }
+
+  &__team-card {
+    transition:
+      transform 0.3s ease,
+      box-shadow 0.3s ease;
+    border-radius: 8px !important;
+    overflow: hidden;
+
+    &:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15) !important;
+    }
+  }
+
+  &__team-img {
+    transition: transform 0.5s ease;
+
+    &:hover {
+      transform: scale(1.05);
+    }
+  }
+}
+
+.testimonial-text {
+  font-size: 1.8rem;
+  line-height: 1.8;
+  font-style: italic;
+  position: relative;
+  padding: 0 2rem;
+
+  &:before,
+  &:after {
+    content: '"';
+    font-size: 3rem;
+    color: #be9c79;
+    position: absolute;
+    font-family: serif;
+  }
+
+  &:before {
+    left: 0;
+    top: -1rem;
+  }
+
+  &:after {
+    right: 0;
+    bottom: -2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .about {
+    &__title {
+      font-size: 2rem !important;
+    }
+
+    &__text {
+      font-size: 1.4rem;
+    }
+  }
+
+  .testimonial-text {
+    font-size: 1.5rem;
   }
 }
