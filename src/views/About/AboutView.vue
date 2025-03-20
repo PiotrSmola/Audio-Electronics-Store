@@ -13,7 +13,7 @@
       <div class="">
         <v-container class="story">
           <v-row justify="center">
-            <v-col cols="10" md="8">
+            <v-col cols="10" md="8" lg="6">
               <h2 class="about__main-title text-center mb-8">Our Story</h2>
 
               <!-- Story Section -->
@@ -134,7 +134,7 @@
               <v-col cols="12">
                 <h2 class="text-center mb-8">Meet Our Team</h2>
               </v-col>
-              <v-col cols="12" sm="8" md="4">
+              <v-col cols="12" sm="8" md="4" lg="3">
                 <v-card class="subpage_about__team-card">
                   <v-img
                     src="src/assets/img/about.jpg"
@@ -151,7 +151,7 @@
                 </v-card>
               </v-col>
 
-              <v-col cols="12" sm="8" md="4">
+              <v-col cols="12" sm="8" md="4" lg="3">
                 <v-card class="subpage_about__team-card">
                   <v-img
                     src="src/assets/img/about.jpg"
@@ -168,7 +168,7 @@
                 </v-card>
               </v-col>
 
-              <v-col cols="12" sm="8" md="4">
+              <v-col cols="12" sm="8" md="4" lg="3">
                 <v-card class="subpage_about__team-card">
                   <v-img
                     src="src/assets/img/about.jpg"
