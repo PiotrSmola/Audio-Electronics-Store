@@ -85,7 +85,8 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
 
 :root {
-  --bg-shape-color: linear-gradient(140deg, #6e8dff, #000000);
+  //#46fbce8e
+  --bg-shape-color: linear-gradient(145deg, #75c1ffaa, #000000);
   --lightblue: #3d9dea;
   --darkblue: #4a4eee;
   --text-color: #d5e1ef;
