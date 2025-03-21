@@ -282,6 +282,13 @@
     background-blend-mode: darken;
     background-size: cover;
     background-position: center;
+    @media (max-width: 768px) {
+      height: 70vh;
+    }
+
+    @media (max-width: 480px) {
+      height: 70vh;
+    }
   }
 
   &__body {
@@ -297,11 +304,29 @@
 
   &__text {
     font-size: 1.8rem;
+    @media (max-width: 1024px) {
+      font-size: 1.6rem;
+    }
+
+    @media (max-width: 768px) {
+      font-size: 1.4rem;
+    }
   }
 
   &__heading {
     font-size: 4rem;
     margin-bottom: 1rem;
+    @media (max-width: 1024px) {
+      font-size: 3.5rem;
+    }
+
+    @media (max-width: 768px) {
+      font-size: 2.8rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 2.2rem;
+    }
   }
 
   &__link {
