@@ -2,7 +2,7 @@
   <header class="navbar">
     <div class="navbar__container container">
       <router-link to="/" class="navbar__logo">
-        Audio Electronics
+        <p id="store-name">Audio Electronics</p>
         <img src="@/assets/img/logo-audio.png" alt="Audio Electronics Logo" class="navbar__img" />
       </router-link>
       <!-- Menu for desktop -->
@@ -151,13 +151,16 @@ export default {
     }
     @media (max-width: 576px) {
       padding: 0 1rem;
+      font-size: 1.5rem;
       gap: 1.4rem;
+      #store-name {
+        display: none;
+      }
     }
     .navbar__img {
       width: 70px;
       margin-left: 1rem;
       @media (max-width: 1020px) {
-        margin-left: 0;
         margin-right: 1rem;
         width: 60px;
       }
