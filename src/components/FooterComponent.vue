@@ -34,11 +34,17 @@ export default {
   padding: 2rem 0;
   font-size: 1.5rem;
   text-align: center;
+  @media (max-width: 576px) {
+    font-size: 1.3rem;
+  }
   .footer__body {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 1rem;
+    @media (max-width: 576px) {
+      width: 85%;
+    }
   }
   .footer__icons {
     display: flex;
