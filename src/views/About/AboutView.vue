@@ -12,8 +12,8 @@
     <main class="subpage_about">
       <div class="">
         <v-container class="story">
-          <v-row justify="center">
-            <v-col cols="10" md="8" lg="6">
+          <v-row justify="center" class="our-story">
+            <v-col cols="11" md="8" lg="6">
               <h2 class="about__main-title text-center mb-8">Our Story</h2>
 
               <!-- Story Section -->
@@ -129,7 +129,7 @@
 
         <v-container class="team">
           <!-- Team Section -->
-          <v-col cols="9">
+          <v-col cols="12" md="10" lg="12">
             <v-row justify="center" class="my-12">
               <v-col cols="12">
                 <h2 class="text-center mb-8">Meet Our Team</h2>
@@ -189,14 +189,14 @@
         </v-container>
 
         <v-container class="testimonials">
-          <v-col cols="9">
+          <v-col cols="12" md="10" lg="12">
             <!-- Testimonials -->
             <v-row justify="center" class="my-12">
               <v-col cols="12">
                 <h2 class="text-center mb-8">What Our Customers Say</h2>
               </v-col>
 
-              <v-col cols="11">
+              <v-col cols="12" sm="10" md="8" lg="10">
                 <v-container>
                   <div class="testimonials-grid">
                     <!-- Testimonial 1 -->

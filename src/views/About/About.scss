@@ -14,7 +14,7 @@
     align-items: center;
 
     @media (max-width: 768px) {
-      height: 40vh;
+      height: 50vh;
     }
   }
 
@@ -76,6 +76,15 @@ h2 {
   .testimonials {
     margin: 0;
   }
+
+  // @media (max-width: 768px) {
+  //   .story {
+  //     display: flex;
+  //     flex-direction: column;
+  //     align-items: center;
+  //   }
+  // }
+
   .team,
   .testimonials {
     display: flex;
@@ -123,6 +132,7 @@ h2 {
     flex-direction: column !important;
     border-radius: 8px !important;
     overflow: hidden;
+    background-color: #f0f0f0;
     transition:
       transform 0.3s ease,
       box-shadow 0.3s ease;
@@ -139,6 +149,9 @@ h2 {
     color: #2c3e50;
     padding-bottom: 1rem;
     position: relative;
+    @media (max-width: 768px) {
+      font-size: 1.8rem !important;
+    }
 
     &:after {
       content: '';
@@ -155,6 +168,9 @@ h2 {
     font-size: 1.4rem;
     line-height: 1.7;
     color: #333;
+    @media (max-width: 768px) {
+      font-size: 1.1rem;
+    }
   }
 
   &__image {
@@ -166,6 +182,10 @@ h2 {
 
       &:hover {
         transform: scale(1.02);
+      }
+
+      @media (max-width: 768px) {
+        height: 300px;
       }
 
       img {
@@ -184,6 +204,11 @@ h2 {
       &:hover {
         transform: scale(1.02);
       }
+
+      @media (max-width: 768px) {
+        height: 300px;
+      }
+
       img {
         width: 100%;
         height: 100%;
@@ -199,6 +224,11 @@ h2 {
       &:hover {
         transform: scale(1.02);
       }
+
+      @media (max-width: 768px) {
+        height: 300px;
+      }
+
       img {
         width: 100%;
         height: 100%;
@@ -271,6 +301,10 @@ h2 {
   padding: 2rem;
   border-radius: 0.8rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+
+  @media (max-width: 768px) {
+    padding: 1.5rem;
+  }
 
   &.purple-bg {
     background: #733fc8;
@@ -356,6 +390,9 @@ h2 {
   font-size: 1.4rem;
   font-weight: 500;
   color: hsl(0, 0%, 90%);
+  @media (max-width: 768px) {
+    font-size: 1.4rem;
+  }
 
   &.dark-text {
     color: #49505a;
@@ -367,6 +404,9 @@ h2 {
   font-size: 1.2rem;
   opacity: 0.5;
   color: hsl(0, 0%, 90%);
+  @media (max-width: 768px) {
+    font-size: 1.1rem;
+  }
 
   &.dark-text {
     color: #49505a;
@@ -379,6 +419,9 @@ h2 {
   margin-bottom: 1.5rem;
   font-weight: 600;
   color: #f3deff;
+  @media (max-width: 768px) {
+    font-size: 1.35rem;
+  }
 
   &.dark-text {
     color: #4b5258;
@@ -389,6 +432,10 @@ h2 {
   font-size: 1.2rem;
   line-height: 1.6;
   opacity: 0.7;
+
+  @media (max-width: 768px) {
+    font-size: 1.1rem;
+  }
 
   &.light-text {
     color: #f3deff;
@@ -401,30 +448,4 @@ h2 {
 
 .border {
   border: 2px solid rgba(255, 255, 255, 0.5) !important;
-}
-
-@media (max-width: 768px) {
-  .testimonial-headline {
-    font-size: 1.4rem;
-  }
-
-  .testimonial-text {
-    font-size: 1.1rem;
-  }
-
-  .testimonial-name {
-    font-size: 1.2rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .subpage_about {
-    &__title {
-      font-size: 2rem !important;
-    }
-
-    &__text {
-      font-size: 1.4rem;
-    }
-  }
 }
