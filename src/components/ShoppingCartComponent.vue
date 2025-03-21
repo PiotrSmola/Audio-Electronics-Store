@@ -83,6 +83,21 @@ export default {
   padding: 1.2rem;
   transform: translateX(100%);
   transition: transform 0.3s ease;
+  overflow-y: auto;
+
+  @media (max-width: 1024px) {
+    padding: 1rem;
+    width: 400px;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+    padding: 0.8rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.6rem;
+  }
 
   &--active {
     transform: translateX(0);
@@ -91,19 +106,43 @@ export default {
   &__title {
     font-size: 2rem;
     margin-bottom: 1rem;
+    color: #000;
+
+    @media (max-width: 768px) {
+      font-size: 1.8rem;
+      text-align: center;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 1.5rem;
+      margin-bottom: 0.8rem;
+    }
   }
 
   &__items {
     list-style: none;
     max-height: 400px;
-    overflow-y: none;
+    overflow-y: auto;
     width: 100%;
+
+    @media (max-width: 768px) {
+      max-height: calc(100vh - 250px);
+    }
+
+    @media (max-width: 480px) {
+      max-height: calc(100vh - 200px);
+    }
 
     li {
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 1rem;
+
+      @media (max-width: 480px) {
+        margin-bottom: 0.8rem;
+        flex-wrap: wrap;
+      }
     }
   }
 
@@ -112,44 +151,90 @@ export default {
     align-items: center;
     font-size: 1.1rem;
     width: 100%;
+
+    @media (max-width: 768px) {
+      font-size: 1rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.9rem;
+      flex-wrap: wrap;
+    }
   }
 
   &__img {
     width: 50px;
     height: 50px;
     object-fit: cover;
+
+    @media (max-width: 480px) {
+      width: 40px;
+      height: 40px;
+    }
   }
 
   &__name {
     flex: 1;
     margin: 0 1rem;
+
+    @media (max-width: 480px) {
+      margin: 0 0.5rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
 
   &__quantity {
     display: flex;
     align-items: center;
+
     button {
       background-color: #1976d2;
       color: #fff;
       border: none;
       padding: 0.2rem 0.5rem;
       cursor: pointer;
+
+      @media (max-width: 480px) {
+        padding: 0.15rem 0.4rem;
+      }
     }
   }
 
   .item_quantity {
     margin: 0 0.5rem;
+
+    @media (max-width: 480px) {
+      margin: 0 0.3rem;
+    }
   }
 
   .changeQuantity {
     font-size: 1rem;
     width: 30px;
     height: 30px;
+
+    @media (max-width: 480px) {
+      font-size: 0.9rem;
+      width: 25px;
+      height: 25px;
+    }
   }
 
   &__price {
     font-size: 1.2rem;
     margin-left: 1rem;
+
+    @media (max-width: 768px) {
+      font-size: 1.1rem;
+      margin-left: 0.8rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 1rem;
+      margin-left: 1.5rem;
+    }
   }
 
   &__remove {
@@ -159,6 +244,16 @@ export default {
     color: red;
     font-size: 1.5rem;
     margin-left: 0.8rem;
+
+    @media (max-width: 768px) {
+      font-size: 1.3rem;
+      margin-left: 0.6rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 1.2rem;
+      margin-left: 0.5rem;
+    }
   }
 
   &__subtotal {
@@ -166,6 +261,15 @@ export default {
     text-align: right;
     margin-top: 1rem;
     font-weight: bold;
+
+    @media (max-width: 768px) {
+      font-size: 1.4rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 1.2rem;
+      text-align: center;
+    }
   }
 
   &__checkout,
@@ -181,13 +285,20 @@ export default {
     border-radius: 3px;
     transition: background-color 0.3s;
 
+    @media (max-width: 768px) {
+      padding: 0.6rem;
+      font-size: 1.3rem;
+    }
+
+    @media (max-width: 480px) {
+      padding: 0.5rem;
+      font-size: 1.1rem;
+      margin-top: 0.8rem;
+    }
+
     &:hover {
       background-color: #1565c0;
     }
-  }
-
-  @media (max-width: 1024px) {
-    width: 100%;
   }
 }
 </style>
