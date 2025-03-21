@@ -75,7 +75,10 @@ export default {
       this.$emit('add-to-cart', product)
     },
     goToDetails() {
-      this.$router.push({ name: 'ProductDetails', params: { id: this.product.id } })
+      this.$router.push({
+        name: 'ProductDetailView',
+        query: { id: this.product.id },
+      })
     },
   },
 }
