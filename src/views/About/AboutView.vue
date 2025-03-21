@@ -196,7 +196,7 @@
                 <h2 class="text-center mb-8">What Our Customers Say</h2>
               </v-col>
 
-              <v-col cols="12">
+              <v-col cols="11">
                 <v-container>
                   <div class="testimonials-grid">
                     <!-- Testimonial 1 -->

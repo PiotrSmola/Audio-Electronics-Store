@@ -33,6 +33,7 @@ export default {
   color: #fff;
   padding: 2rem 0;
   font-size: 1.5rem;
+  text-align: center;
   .footer__body {
     display: flex;
     flex-direction: column;
