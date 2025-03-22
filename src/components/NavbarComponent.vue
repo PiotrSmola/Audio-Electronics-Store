@@ -181,6 +181,7 @@ export default {
       color: #fff;
       text-decoration: none;
       font-size: 1.7rem;
+      text-transform: uppercase;
       transition: color 0.3s;
       &:hover {
         color: #be9c79;

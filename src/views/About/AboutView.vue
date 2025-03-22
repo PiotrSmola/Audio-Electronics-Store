@@ -54,7 +54,7 @@
                 <v-col cols="12" md="6" class="d-flex">
                   <div class="h-100 w-100">
                     <v-img
-                      src="src/assets/img/about.jpg"
+                      src="src/assets/img/about2.jpg"
                       alt="Premium audio components"
                       class="subpage_about__image__sourcing rounded-lg"
                       cover
@@ -115,7 +115,7 @@
                 <v-col cols="12" md="6" order="md-1" order-sm="2" class="d-flex">
                   <div class="h-100 w-100">
                     <v-img
-                      src="src/assets/img/about.jpg"
+                      src="src/assets/img/about3.jpg"
                       alt="Audio testing studio"
                       class="subpage_about__image__philosophy rounded-lg"
                       cover
@@ -137,7 +137,7 @@
               <v-col cols="12" sm="8" md="4" lg="3">
                 <v-card class="subpage_about__team-card">
                   <v-img
-                    src="src/assets/img/about.jpg"
+                    src="src/assets/img/team1.jpg"
                     height="300"
                     cover
                     class="subpage_about__team-img"
@@ -154,7 +154,7 @@
               <v-col cols="12" sm="8" md="4" lg="3">
                 <v-card class="subpage_about__team-card">
                   <v-img
-                    src="src/assets/img/about.jpg"
+                    src="src/assets/img/team3.jpg"
                     height="300"
                     cover
                     class="subpage_about__team-img"
@@ -171,7 +171,7 @@
               <v-col cols="12" sm="8" md="4" lg="3">
                 <v-card class="subpage_about__team-card">
                   <v-img
-                    src="src/assets/img/about.jpg"
+                    src="src/assets/img/team2.jpg"
                     height="300"
                     cover
                     class="subpage_about__team-img"
@@ -204,7 +204,7 @@
                       <div class="testimonial-header">
                         <div class="testimonial-img">
                           <v-img
-                            src="src/assets/img/testimonials.jpg"
+                            src="src/assets/img/testimonials1.jpg"
                             width="50"
                             height="50"
                             class="rounded-circle border"
@@ -235,7 +235,7 @@
                       <div class="testimonial-header">
                         <div class="testimonial-img">
                           <v-img
-                            src="src/assets/img/testimonials.jpg"
+                            src="src/assets/img/testimonials2.jpg"
                             width="50"
                             height="50"
                             class="rounded-circle border"
@@ -261,7 +261,7 @@
                       <div class="testimonial-header">
                         <div class="testimonial-img">
                           <v-img
-                            src="src/assets/img/testimonials.jpg"
+                            src="src/assets/img/testimonials3.jpg"
                             width="50"
                             height="50"
                             class="rounded-circle border"
@@ -293,7 +293,7 @@
                       <div class="testimonial-header">
                         <div class="testimonial-img">
                           <v-img
-                            src="src/assets/img/testimonials.jpg"
+                            src="src/assets/img/testimonials4.jpg"
                             width="50"
                             height="50"
                             class="rounded-circle border"
@@ -319,7 +319,7 @@
                       <div class="testimonial-header">
                         <div class="testimonial-img">
                           <v-img
-                            src="src/assets/img/testimonials.jpg"
+                            src="src/assets/img/testimonials5.jpg"
                             width="50"
                             height="50"
                             class="rounded-circle border"

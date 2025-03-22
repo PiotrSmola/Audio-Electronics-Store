@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Birthstone&family=Lavishly+Yours&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Birthstone&family=Lavishly+Yours&family=Playwrite+HU:wght@100..400&family=Red+Hat+Text:ital,wght@0,300..700;1,300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Birthstone&family=Kumbh+Sans:wght@100..900&family=Lavishly+Yours&family=Playwrite+HU:wght@100..400&family=Red+Hat+Text:ital,wght@0,300..700;1,300..700&display=swap');
 //
 // HEADER ABOUT
 //
@@ -144,8 +147,10 @@ h2 {
   }
 
   &__title {
-    font-size: 2.4rem !important;
-    font-weight: 600 !important;
+    font-size: 2.8rem !important;
+    font-family: 'Birthstone', cursive;
+    font-weight: 700;
+    font-style: normal;
     color: #2c3e50;
     padding-bottom: 1rem;
     position: relative;
@@ -165,8 +170,13 @@ h2 {
   }
 
   &__text {
-    font-size: 1.4rem;
+    font-size: 1.3rem;
     line-height: 1.7;
+    font-family: 'Red Hat Text', sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-style: normal;
     color: #333;
     @media (max-width: 768px) {
       font-size: 1.1rem;
@@ -243,6 +253,8 @@ h2 {
       box-shadow 0.3s ease;
     border-radius: 8px !important;
     overflow: hidden;
+    min-height: 60vh;
+    max-height: 700px;
 
     &:hover {
       transform: translateY(-8px);
@@ -260,6 +272,10 @@ h2 {
       font-size: 1.3rem;
     }
     &-text {
+      font-family: 'Kumbh Sans', sans-serif;
+      font-optical-sizing: auto;
+      font-weight: 400;
+      font-style: normal;
       font-size: 1.2rem;
       padding: 1.3rem 1.6rem;
     }

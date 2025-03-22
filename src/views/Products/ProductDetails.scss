@@ -216,9 +216,7 @@
 
     tr {
       border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-      @media (max-width: 1200px) {
-        font-size: 1.3rem;
-      }
+      font-size: 1.3rem;
       @media (max-width: 768px) {
         font-size: 1.2rem;
       }
@@ -319,9 +317,7 @@
   &__review-author {
     font-weight: 500;
     opacity: 0.8;
-    @media (max-width: 1200px) {
-      font-size: 1.2rem;
-    }
+    font-size: 1.2rem;
     @media (max-width: 768px) {
       font-size: 1rem;
     }
@@ -336,9 +332,7 @@
   &__review-text {
     margin: 0;
     line-height: 1.6;
-    @media (max-width: 1200px) {
-      font-size: 1.2rem;
-    }
+    font-size: 1.2rem;
     @media (max-width: 768px) {
       font-size: 1.1rem;
     }
