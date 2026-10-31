@@ -1,3 +1,6 @@
+@use 'sass:math';
+@use '@/assets/scss/tokens' as t;
+@use '@/assets/scss/mixins' as mx;
 @import '@/assets/scss/main.scss';
 
 //
@@ -10,11 +13,21 @@
     background-blend-mode: darken;
     background-size: cover;
     background-position: center;
+    // stacking context for the decorative 3D layer; clips it so it can never cause x-overflow
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
     @media (max-width: 576px) {
       height: 90vh;
     }
   }
+  // WebGL canvas layer (HeroSceneComponent) – sits behind the text and ignores the pointer
+  &__scene {
+    z-index: 0;
+  }
   &__body {
+    position: relative;
+    z-index: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -26,6 +39,8 @@
   }
   &__text {
     font-size: 1.8rem;
+    text-shadow: 0 2px 18px rgba(0, 0, 0, 0.6);
+    animation: header-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.15s both;
     @media (max-width: 768px) {
       font-size: 1.4rem;
     }
@@ -33,261 +48,1151 @@
   &__heading {
     font-size: 4rem;
     margin-bottom: 1rem;
+    // color previously came from a global h1 rule leaking out of ProductCardComponent
+    color: #d5e1ef;
+    text-shadow: 0 4px 30px rgba(0, 0, 0, 0.65);
+    animation: header-rise 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.35s both;
     @media (max-width: 768px) {
       font-size: 2.5rem;
     }
   }
   &__link {
+    position: relative;
     padding: 1rem 2rem;
     border: 1px solid #fff;
     color: #fff;
     text-decoration: none;
-    transition: background-color 0.3s;
-    &:hover {
+    background-color: rgba(16, 19, 17, 0.25);
+    backdrop-filter: blur(2px);
+    transition:
+      background-color 0.3s,
+      border-color 0.3s,
+      box-shadow 0.4s,
+      transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    animation: header-rise 1s cubic-bezier(0.22, 1, 0.36, 1) 0.6s both;
+    &:hover,
+    &:focus-visible {
       background-color: rgba(255, 255, 255, 0.2);
       border: 1px solid #a84c00;
+      transform: translateY(-2px);
+      box-shadow:
+        0 0 0 1px rgba(190, 156, 121, 0.35),
+        0 0 24px rgba(190, 156, 121, 0.45),
+        0 10px 40px rgba(168, 76, 0, 0.35);
+    }
+    &:active {
+      transform: translateY(0);
     }
     @media (max-width: 576px) {
       font-size: smaller;
     }
   }
-}
-
-//
-// ABOUT
-//
-.about {
-  background: linear-gradient(135deg, #333333, #410e01);
-  color: #fff;
-  padding-bottom: 3.5rem;
-  padding-top: 2.4rem;
-  text-align: center;
-  &__heading {
-    font-size: 3.8rem;
-    margin-bottom: 1.7rem;
-    @media (max-width: 576px) {
-      font-size: 2.5rem;
+  @media (prefers-reduced-motion: reduce) {
+    &__text,
+    &__heading,
+    &__link {
+      animation: none;
+      transition: none;
     }
-  }
-  &__content {
-    color: #fff;
-  }
-  &__body {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
-  }
-  &__img {
-    width: 100%;
-    max-width: 800px;
-    height: 400px;
-    object-fit: cover;
-    clip-path: polygon(15% 0%, 100% 0%, 100% 85%, 85% 100%, 0% 100%, 0% 10%);
-    @media (max-width: 576px) {
-      height: 250px;
-    }
-  }
-  &__title {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    @media (max-width: 576px) {
-      font-size: 1.7rem;
-    }
-  }
-  &__text {
-    font-size: 1.6rem;
-    max-width: 800px;
-    @media (max-width: 576px) {
-      font-size: 1.2rem;
-    }
-  }
-  &__btn {
-    padding: 1rem 2rem;
-    background-color: #be9c79;
-    color: #fff;
-    text-decoration: none;
-    transition: background-color 0.3s;
-    &:hover {
-      background-color: darken(#be9c79, 10%);
-    }
-    @media (max-width: 576px) {
-      font-size: 1.3rem;
-      padding: 0.7rem 1.4rem;
+    &__link:hover,
+    &__link:focus-visible {
+      transform: none;
     }
   }
 }
 
+@keyframes header-rise {
+  // `translate` (not `transform`) so the filled animation never overrides the CTA hover lift
+  from {
+    opacity: 0;
+    translate: 0 24px;
+    filter: blur(6px);
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
+    filter: blur(0);
+  }
+}
+
+// Sections below the hero. Block names carry a `home-` prefix because this stylesheet is
+// global (not scoped) and other pages have their own about/newsletter blocks.
+
+$display-size: clamp(3.4rem, 5vw, 5.6rem);
+// Two-column layouts stack below this width
+$stack-bp: 900px;
+$led-open: #6fae7c;
+$led-closed: #b8432f;
+$error-on-dark: #e39478;
+
 //
-// SERVICES
+// SHARED BUTTONS (home page only)
 //
-.services {
-  background: linear-gradient(135deg, #552701, #afdfff);
-  color: #222;
-  padding-bottom: 3.5rem;
-  padding-top: 2.4rem;
-  text-align: center;
-  color: #fff;
-  &__heading {
-    font-size: 3.8rem;
-    margin-bottom: 2rem;
-    @media (max-width: 576px) {
-      font-size: 2.3rem;
+.home-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 1.3rem 2.4rem;
+  border: 1px solid transparent;
+  border-radius: t.$radius-sm;
+  font-size: 1.4rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  line-height: 1.2;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background-color 0.3s,
+    border-color 0.3s,
+    color 0.3s;
+
+  &:focus-visible {
+    outline: 2px solid t.$brass;
+    outline-offset: 3px;
+  }
+
+  &--primary {
+    background-color: t.$brass;
+    color: t.$ink;
+    @include mx.hover-lift(rgba(140, 106, 71, 0.55), 2px);
+    &:hover,
+    &:focus-visible {
+      background-color: t.$brass-light;
     }
   }
-  &__box {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 2rem;
-  }
-  &__item {
-    background: #fff;
-    padding: 0.8rem;
-    border-radius: 5px;
-    width: 350px;
-    height: 480px;
-    background: linear-gradient(135deg, #be9c79 0%, #90755b 50%, #6b5744 50%, #be9c79 100%);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s;
-    &:hover {
-      transform: translateY(-5px);
+
+  // Hairline outline with a small arrow that slides on hover
+  &--ghost {
+    border-color: rgba(29, 23, 18, 0.3);
+    color: t.$text-on-light;
+    &::after {
+      content: '→';
+      transition: transform 0.4s t.$ease-out;
     }
-    @media (max-width: 576px) {
-      width: 90%;
-      height: auto;
-      padding-bottom: 1rem;
+    &:hover,
+    &:focus-visible {
+      border-color: t.$brass-dark;
+      color: t.$brass-dark;
+      &::after {
+        transform: translateX(4px);
+      }
     }
   }
-  &__img {
-    width: 100%;
-    height: 250px;
-    object-fit: cover;
-    margin-bottom: 1rem;
-    @media (max-width: 576px) {
-      height: 180px;
+
+  &--on-dark {
+    border-color: rgba(239, 231, 220, 0.3);
+    color: t.$text-on-dark;
+    &:hover,
+    &:focus-visible {
+      border-color: t.$brass;
+      color: t.$brass-light;
     }
   }
-  &__title {
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
-    @media (max-width: 576px) {
-      font-size: 1.7rem;
-      margin-bottom: 0.3rem;
+
+  @media (prefers-reduced-motion: reduce) {
+    &::after {
+      transition: none;
     }
-  }
-  &__text {
-    font-size: 1.4rem;
-    padding: 0 2.5rem;
-    @media (max-width: 576px) {
-      font-size: 1.2rem;
+    &:hover::after,
+    &:focus-visible::after {
+      transform: none;
     }
   }
 }
 
 //
-// OPENING HOURS
+// ABOUT — asymmetric split: large toned photo left, copy + VU meter right
 //
-.open {
-  background-color: #000117;
-  color: #fff;
-  padding: 3rem 0;
-  text-align: center;
-  &__heading {
-    font-size: 3rem;
-    margin-bottom: 2rem;
-    @media (max-width: 576px) {
-      font-size: 2.3rem;
-    }
-  }
-  &__body {
-    display: flex;
-    flex-direction: column;
+.home-about {
+  position: relative;
+  padding: t.$section-pad 0;
+  background-color: t.$paper;
+  color: t.$text-on-light;
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    column-gap: clamp(2rem, 4vw, 5rem);
     align-items: center;
   }
-  &__days {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    font-size: 1.6rem;
-    width: 100%;
-    max-width: 700px;
-    @media (max-width: 576px) {
-      font-size: 1.2rem;
-      width: 85%;
+
+  &__figure {
+    grid-column: 1 / span 7;
+    margin: 0;
+  }
+
+  // Photo box. The double box-shadow draws a hairline frame offset behind the photo.
+  &__frame {
+    position: relative;
+    aspect-ratio: 5 / 4;
+    overflow: hidden;
+    border-radius: t.$radius-sm;
+    background-color: t.$ink;
+    box-shadow:
+      1.6rem 1.6rem 0 -1px t.$paper,
+      1.6rem 1.6rem 0 0 rgba(140, 106, 71, 0.55);
+
+    // Warm brass toning, so the cool studio photo sits in the site's palette
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-color: t.$brass;
+      mix-blend-mode: color;
+      opacity: 0.8;
+      pointer-events: none;
     }
   }
-  &__day {
+
+  &__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: 40% 60%;
+    filter: grayscale(1) contrast(1.15) brightness(1.15);
+    transform: scale(1.02);
+    transition: transform 1.4s t.$ease-out;
+  }
+
+  &__figure:hover &__img {
+    transform: scale(1.06);
+  }
+
+  &__caption {
     display: flex;
     justify-content: space-between;
-    width: 100%;
+    gap: 1rem;
+    margin-top: 3rem;
+    padding-top: 1rem;
+    border-top: 1px solid t.$line-on-light;
+    font-family: t.$font-mono;
+    font-size: 1.1rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: t.$muted-on-light;
+  }
+
+  &__content {
+    grid-column: 8 / span 5;
+  }
+
+  &__eyebrow {
+    color: t.$brass-dark;
+  }
+
+  &__heading {
+    margin: 1.6rem 0 2.4rem;
+    font-size: $display-size;
+    color: t.$text-on-light;
+    em {
+      font-family: inherit;
+      font-style: italic;
+      color: t.$brass-dark;
+    }
+  }
+
+  &__text {
+    max-width: 46ch;
+    font-size: 1.6rem;
+    line-height: 1.75;
+    color: t.$muted-on-light;
+  }
+
+  // VU meter beside a short note; the needle swings up when revealed, then "plays"
+  &__meter {
+    display: flex;
+    align-items: center;
+    gap: 2.4rem;
+    margin: 3.6rem 0;
+    padding: 1.8rem 2rem 1.6rem;
+    border: 1px solid t.$line-on-light;
+    border-radius: t.$radius-sm;
+    background-color: rgba(255, 255, 255, 0.35);
+  }
+
+  // Narrow copy column next to the photo: stack the meter above its note
+  @media (min-width: $stack-bp + 1) and (max-width: 1200px) {
+    &__meter {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.4rem;
+    }
+  }
+
+  &__vu {
+    flex: 0 0 auto;
+    width: 15rem;
+    height: auto;
+    overflow: visible;
+  }
+
+  &__vu-arc {
+    fill: none;
+    stroke: rgba(29, 23, 18, 0.55);
+    stroke-width: 1;
+    &--peak {
+      stroke: t.$oxblood;
+      stroke-width: 4;
+    }
+  }
+
+  &__vu-tick {
+    stroke: rgba(29, 23, 18, 0.6);
+    stroke-width: 1;
+    &--peak {
+      stroke: t.$oxblood;
+    }
+  }
+
+  &__vu-label {
+    font-family: t.$font-mono;
+    font-size: 10.5px;
+    text-anchor: middle;
+    dominant-baseline: middle;
+    fill: t.$muted-on-light;
+    &--peak {
+      fill: t.$oxblood;
+    }
+  }
+
+  &__vu-unit {
+    font-family: t.$font-display;
+    font-style: italic;
+    font-size: 17px;
+    text-anchor: end;
+    fill: t.$text-on-light;
+  }
+
+  &__vu-needle {
+    stroke: t.$text-on-light;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    transform-box: view-box;
+    transform-origin: 120px 138px;
+    transform: rotate(-50deg);
+    transition: transform 1.6s cubic-bezier(0.34, 1.4, 0.5, 1) 0.3s;
+  }
+
+  &__vu-pivot {
+    fill: t.$text-on-light;
+  }
+
+  &__meter[data-revealed] &__vu-needle {
+    transform: rotate(-6deg);
+    animation: vu-play 5.2s ease-in-out 2s infinite;
+  }
+
+  &__meter-note {
+    font-size: 1.4rem;
+    line-height: 1.6;
+    color: t.$muted-on-light;
+
+    span {
+      display: block;
+      margin-bottom: 0.6rem;
+      font-family: t.$font-mono;
+      font-size: 1.05rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: t.$brass-dark;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+  }
+
+  @media (max-width: $stack-bp) {
+    // One column when stacked; 11 column gaps alone are wider than a small phone
+    &__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    &__figure,
+    &__content {
+      grid-column: 1 / -1;
+    }
+    &__figure {
+      margin-bottom: 4.4rem;
+    }
+    &__content {
+      max-width: 62rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    &__frame {
+      aspect-ratio: 4 / 3;
+      box-shadow:
+        0.8rem 0.8rem 0 -1px t.$paper,
+        0.8rem 0.8rem 0 0 rgba(140, 106, 71, 0.55);
+    }
+    &__caption {
+      margin-top: 2rem;
+      font-size: 1rem;
+    }
+    &__text {
+      font-size: 1.5rem;
+    }
+    &__meter {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1.4rem;
+    }
+    &__vu {
+      width: 15rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__img,
+    &__vu-needle {
+      transition: none;
+    }
+    &__figure:hover &__img {
+      transform: scale(1.02);
+    }
+    &__meter[data-revealed] &__vu-needle {
+      animation: none;
+    }
+  }
+}
+
+// Needle movement of a VU meter following music (angles around -6deg)
+@keyframes vu-play {
+  0%,
+  100% {
+    transform: rotate(-6deg);
+  }
+  12% {
+    transform: rotate(8deg);
+  }
+  22% {
+    transform: rotate(-2deg);
+  }
+  34% {
+    transform: rotate(14deg);
+  }
+  46% {
+    transform: rotate(3deg);
+  }
+  58% {
+    transform: rotate(19deg);
+  }
+  70% {
+    transform: rotate(-4deg);
+  }
+  84% {
+    transform: rotate(6deg);
   }
 }
 
 //
-// NEWSLETTER
+// SERVICES — numbered editorial list; the photo panel follows the hovered row
 //
-.newsletter {
-  background-color: #111;
-  color: #fff;
-  padding: 3rem 0;
-  text-align: center;
-  &__content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    max-width: 600px;
-    margin: 0 auto;
+.home-services {
+  position: relative;
+  padding: t.$section-pad 0;
+  background-color: t.$ink-2;
+  color: t.$text-on-dark;
+
+  > .container {
+    position: relative;
+    z-index: 1;
   }
-  &__title {
-    font-size: 3rem;
-    margin-bottom: 1rem;
-    @media (max-width: 576px) {
-      font-size: 2.2rem;
+
+  &__head {
+    display: grid;
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    gap: 3rem;
+    align-items: end;
+    padding-bottom: 4rem;
+    margin-bottom: 5rem;
+    border-bottom: 1px solid t.$line-on-dark;
+  }
+
+  &__heading {
+    margin-top: 1.6rem;
+    font-size: $display-size;
+    em {
+      font-family: inherit;
+      font-style: italic;
+      color: t.$brass-light;
     }
   }
-  &__text {
+
+  &__intro {
+    justify-self: end;
+    max-width: 40ch;
     font-size: 1.6rem;
-    margin-bottom: 2rem;
-    @media (max-width: 576px) {
-      font-size: 1.4rem;
-      width: 85%;
-      text-align: center;
-    }
+    line-height: 1.75;
+    color: t.$muted-on-dark;
   }
-  &__form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
-    @media (max-width: 576px) {
-      width: 85%;
-    }
+
+  &__body {
+    display: grid;
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    gap: clamp(3rem, 5vw, 7rem);
+    align-items: start;
   }
-  &__input {
+
+  &__visual {
+    position: sticky;
+    top: 12rem;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: t.$radius-sm;
+    background-color: t.$ink-3;
+  }
+
+  &__visual-img {
+    position: absolute;
+    inset: 0;
     width: 100%;
-    padding: 0.8rem;
-    font-size: 1.4rem;
-    border: 1px solid #e77300;
-    color: #fff;
-    @media (max-width: 576px) {
-      font-size: 1.1rem;
+    height: 100%;
+    object-fit: cover;
+    filter: saturate(0.7) sepia(0.15) contrast(1.05);
+    opacity: 0;
+    transform: scale(1.08);
+    transition:
+      opacity 0.7s ease,
+      transform 1.6s t.$ease-out;
+
+    &--active {
+      opacity: 1;
+      transform: scale(1);
     }
   }
-  &__btn {
-    padding: 1rem 2rem;
-    background-color: #ba5f05;
-    color: #fff;
-    border: none;
-    font-size: 1.6rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    &:hover {
-      background-color: darken(#ab5804, 10%);
+
+  &__visual-tag {
+    position: absolute;
+    left: 1.6rem;
+    bottom: 1.6rem;
+    padding: 0.5rem 0.9rem;
+    border-radius: t.$radius-sm;
+    background-color: rgba(16, 19, 17, 0.72);
+    font-family: t.$font-mono;
+    font-size: 1.1rem;
+    letter-spacing: 0.14em;
+    color: t.$text-on-dark;
+  }
+
+  &__list {
+    list-style: none;
+  }
+
+  &__item {
+    position: relative;
+    display: grid;
+    grid-template-columns: 6rem minmax(0, 1fr);
+    gap: 2rem;
+    padding: 3.4rem 0;
+    border-bottom: 1px solid t.$line-on-dark;
+
+    &:first-child {
+      padding-top: 0.6rem;
     }
-    @media (max-width: 576px) {
+
+    // Brass hairline that draws across the active row
+    &::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -1px;
+      height: 1px;
+      background-color: t.$brass;
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.9s t.$ease-out;
+    }
+  }
+
+  &__img {
+    display: none;
+  }
+
+  &__number {
+    padding-top: 0.9rem;
+    font-family: t.$font-mono;
+    font-size: 1.3rem;
+    letter-spacing: 0.1em;
+    color: t.$muted-on-dark;
+    transition: color 0.4s;
+  }
+
+  &__title {
+    font-family: t.$font-display;
+    font-weight: 400;
+    font-size: clamp(2.6rem, 3vw, 3.6rem);
+    line-height: 1.1;
+    color: t.$text-on-dark;
+    transition:
+      transform 0.6s t.$ease-out,
+      color 0.4s;
+  }
+
+  &__text {
+    max-width: 52ch;
+    margin-top: 1rem;
+    font-size: 1.5rem;
+    line-height: 1.7;
+    color: t.$muted-on-dark;
+  }
+
+  &__tags {
+    margin-top: 1.4rem;
+    font-family: t.$font-mono;
+    font-size: 1.1rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: t.$brass;
+  }
+
+  &__item--active {
+    &::after {
+      transform: scaleX(1);
+    }
+  }
+  &__item--active &__number {
+    color: t.$brass;
+  }
+  &__item--active &__title {
+    color: t.$brass-light;
+  }
+
+  &__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-top: 5rem;
+
+    p {
+      font-family: t.$font-display;
+      font-style: italic;
+      font-size: clamp(2rem, 2.4vw, 2.4rem);
+      color: t.$text-on-dark;
+    }
+  }
+
+  @media (max-width: $stack-bp) {
+    &__head,
+    &__body {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    &__intro {
+      justify-self: start;
+    }
+    &__visual {
+      display: none;
+    }
+    &__item {
+      padding: 3rem 0;
+      &:first-child {
+        padding-top: 0;
+      }
+    }
+    &__img {
+      display: block;
+      grid-column: 1 / -1;
+      width: 100%;
+      aspect-ratio: 21 / 9;
+      object-fit: cover;
+      border-radius: t.$radius-sm;
+      filter: saturate(0.8) contrast(1.05);
+    }
+    // No hover on touch layouts: every row reads the same
+    &__item--active &__title {
+      color: t.$text-on-dark;
+      transform: none;
+    }
+    &__item--active &__number {
+      color: t.$brass;
+    }
+    &__number {
+      color: t.$brass;
+    }
+    &__item::after {
+      display: none;
+    }
+  }
+
+  @media (max-width: 576px) {
+    &__head {
+      padding-bottom: 3rem;
+      margin-bottom: 3.6rem;
+    }
+    &__item {
+      grid-template-columns: 3.6rem minmax(0, 1fr);
+      gap: 1.2rem;
+    }
+    &__img {
+      aspect-ratio: 4 / 3;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__visual-img,
+    &__title,
+    &__item::after {
+      transition: opacity 0.2s;
+    }
+    &__visual-img {
+      transform: none;
+    }
+    &__item--active &__title {
+      transform: none;
+    }
+  }
+}
+
+//
+// OPENING HOURS — timetable styled as a hi-fi front panel, with a 24h timeline per row
+//
+.home-open {
+  position: relative;
+  padding: calc(#{t.$section-pad} * 0.7) 0 t.$section-pad;
+  background-color: t.$paper;
+  color: t.$text-on-light;
+
+  &__staff {
+    margin-bottom: clamp(3.6rem, 6vw, 6.4rem) !important;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+    gap: clamp(3rem, 6vw, 8rem);
+    align-items: center;
+  }
+
+  &__eyebrow {
+    color: t.$brass-dark;
+  }
+
+  &__heading {
+    margin: 1.6rem 0 2rem;
+    font-size: $display-size;
+    em {
+      font-family: inherit;
+      font-style: italic;
+      color: t.$brass-dark;
+    }
+  }
+
+  &__lead {
+    max-width: 34ch;
+    margin-bottom: 2.8rem;
+    font-size: 1.6rem;
+    line-height: 1.75;
+    color: t.$muted-on-light;
+  }
+
+  // Live status as a small LED readout
+  &__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.9rem 1.4rem;
+    border: 1px solid t.$line-on-light;
+    border-radius: t.$radius-sm;
+    background-color: rgba(255, 255, 255, 0.5);
+    font-family: t.$font-mono;
+    font-size: 1.25rem;
+    letter-spacing: 0.04em;
+    color: t.$text-on-light;
+  }
+
+  &__status-dot {
+    width: 9px;
+    height: 9px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    box-shadow: inset 0 -1px 2px rgba(0, 0, 0, 0.25);
+    animation: status-pulse 2s ease-out infinite;
+  }
+  &__status--open &__status-dot {
+    --pulse-color: rgba(111, 174, 124, 0.55);
+    background-color: $led-open;
+  }
+  &__status--closed &__status-dot {
+    --pulse-color: rgba(184, 67, 47, 0.5);
+    background-color: $led-closed;
+    animation-duration: 3s;
+  }
+
+  // The panel
+  &__panel {
+    position: relative;
+    padding: 3rem 3.6rem 3.2rem;
+    border: 1px solid rgba(190, 156, 121, 0.18);
+    border-radius: t.$radius;
+    background: linear-gradient(180deg, t.$ink-3, t.$ink-2);
+    color: t.$text-on-dark;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.05),
+      t.$shadow-lift;
+  }
+
+  &__screw {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #6a5848, #1b1511 75%);
+    &::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 1px;
+      right: 1px;
+      height: 1px;
+      background-color: rgba(0, 0, 0, 0.6);
+      transform: rotate(-35deg);
+    }
+    &--tl {
+      top: 1.2rem;
+      left: 1.2rem;
+    }
+    &--tr {
+      top: 1.2rem;
+      right: 1.2rem;
+    }
+    &--bl {
+      bottom: 1.2rem;
+      left: 1.2rem;
+    }
+    &--br {
+      bottom: 1.2rem;
+      right: 1.2rem;
+    }
+  }
+
+  &__panel-head {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: 1.6rem;
+    margin-bottom: 2rem;
+    border-bottom: 1px solid t.$line-on-dark;
+    font-family: t.$font-mono;
+    font-size: 1.1rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: t.$muted-on-dark;
+  }
+
+  // Hour labels aligned with the timeline column
+  &__scale {
+    position: relative;
+    height: 1.6rem;
+    margin-bottom: 0.2rem;
+    font-family: t.$font-mono;
+    font-size: 1rem;
+    color: t.$muted-on-dark;
+
+    span {
+      position: absolute;
+      top: 0;
+      transform: translateX(-50%);
+    }
+  }
+
+  // Label and time on one line, the 24h track full width underneath
+  &__day {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1.1rem 2rem;
+    align-items: baseline;
+    padding: 1.8rem 0 2rem;
+    border-bottom: 1px solid rgba(190, 156, 121, 0.12);
+    &:last-child {
+      border-bottom: 0;
+    }
+  }
+
+  &__day-label {
+    font-size: 1.6rem;
+    color: t.$text-on-dark;
+  }
+
+  &__day-short {
+    display: none;
+  }
+
+  &__today-tag {
+    display: inline-block;
+    margin-left: 0.6rem;
+    padding: 0.15rem 0.5rem;
+    border-radius: 2px;
+    background-color: t.$brass;
+    color: t.$ink;
+    font-family: t.$font-mono;
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    vertical-align: 0.2em;
+  }
+
+  // 24h track: an hour tick every 1/24, the opening window as a filled band
+  &__bar {
+    grid-column: 1 / -1;
+    order: 3;
+    position: relative;
+    height: 1.4rem;
+    border-bottom: 1px solid rgba(239, 231, 220, 0.2);
+    background: linear-gradient(90deg, rgba(239, 231, 220, 0.16) 1px, transparent 1px) 0 100% /
+      calc(100% / 24) 45% repeat-x;
+  }
+
+  &__bar-fill {
+    position: absolute;
+    top: 2px;
+    bottom: 3px;
+    border-radius: 1px;
+    background-color: rgba(190, 156, 121, 0.35);
+    transform-origin: left;
+  }
+
+  &__days[data-revealed] &__bar-fill {
+    animation: bar-grow 1.1s t.$ease-out both;
+  }
+  @for $i from 1 through 3 {
+    &__days[data-revealed] &__day:nth-child(#{$i}) &__bar-fill {
+      animation-delay: #{0.25 + $i * 0.12}s;
+    }
+  }
+
+  &__bar-now {
+    position: absolute;
+    top: -5px;
+    bottom: -3px;
+    width: 2px;
+    margin-left: -1px;
+    background-color: t.$text-on-dark;
+    &::before {
+      content: '';
+      position: absolute;
+      top: -4px;
+      left: 50%;
+      border: 4px solid transparent;
+      border-top-color: t.$text-on-dark;
+      transform: translateX(-50%);
+    }
+  }
+
+  &__day-time {
+    font-family: t.$font-mono;
+    font-size: 1.45rem;
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    color: t.$text-on-dark;
+  }
+
+  &__day--today {
+    .home-open__day-label,
+    .home-open__day-time {
+      color: t.$brass-light;
+    }
+    .home-open__bar-fill {
+      background-color: t.$brass;
+    }
+  }
+
+  @media (max-width: $stack-bp) {
+    &__grid {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  @media (max-width: 576px) {
+    &__panel {
+      padding: 2.4rem 1.6rem 2.2rem;
+    }
+    &__panel-head {
+      font-size: 1rem;
+      letter-spacing: 0.12em;
+    }
+    &__day {
+      column-gap: 0.8rem;
+    }
+    &__day-label {
       font-size: 1.4rem;
-      padding: 0.7rem 1.5rem;
+    }
+    &__day-name {
+      display: none;
+    }
+    &__day-short {
+      display: inline;
+    }
+    &__today-tag {
+      margin-left: 0.4rem;
+      font-size: 0.85rem;
+    }
+    &__day-time {
+      font-size: 1.15rem;
+      white-space: nowrap;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &__status-dot {
+      animation: none;
+    }
+    &__days[data-revealed] &__bar-fill {
+      animation: none;
+    }
+  }
+}
+
+@keyframes bar-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+//
+// NEWSLETTER — dark ink, drifting notes, inline underline field
+//
+.home-newsletter {
+  position: relative;
+  overflow: hidden;
+  padding: t.$section-pad 0;
+  background-color: t.$ink;
+  color: t.$text-on-dark;
+
+  &__grid {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    gap: clamp(3rem, 6vw, 8rem);
+    align-items: end;
+  }
+
+  &__title {
+    margin: 1.6rem 0 2rem;
+    font-size: $display-size;
+    em {
+      font-family: inherit;
+      font-style: italic;
+      color: t.$brass-light;
+    }
+  }
+
+  &__text {
+    max-width: 44ch;
+    font-size: 1.6rem;
+    line-height: 1.75;
+    color: t.$muted-on-dark;
+    strong {
+      font-weight: 500;
+      color: t.$brass-light;
+    }
+  }
+
+  &__form {
+    width: 100%;
+  }
+
+  &__label {
+    display: block;
+    margin-bottom: 0.6rem;
+    font-family: t.$font-mono;
+    font-size: 1.1rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: t.$muted-on-dark;
+  }
+
+  &__field {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    border-bottom: 1px solid rgba(239, 231, 220, 0.35);
+    transition: border-color 0.3s;
+
+    &:focus-within {
+      border-color: t.$brass;
+    }
+    &--error,
+    &--error:focus-within {
+      border-color: $error-on-dark;
+    }
+  }
+
+  &__input {
+    flex: 1;
+    min-width: 0;
+    padding: 1.4rem 0;
+    border: 0;
+    background: transparent;
+    color: t.$text-on-dark;
+    font-size: 1.9rem;
+    outline: none;
+    &::placeholder {
+      color: rgba(239, 231, 220, 0.3);
+    }
+  }
+
+  &__btn {
+    flex-shrink: 0;
+    padding: 1.1rem 2.2rem;
+    border: 0;
+    border-radius: t.$radius-sm;
+    background-color: t.$brass;
+    color: t.$ink;
+    font-size: 1.4rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    cursor: pointer;
+    @include mx.hover-lift(rgba(190, 156, 121, 0.4), 2px);
+    &:hover,
+    &:focus-visible {
+      background-color: t.$brass-light;
+    }
+    &:focus-visible {
+      outline: 2px solid t.$brass-light;
+      outline-offset: 3px;
+    }
+  }
+
+  &__hint,
+  &__error {
+    margin-top: 1.2rem;
+    font-size: 1.3rem;
+  }
+  &__hint {
+    color: t.$muted-on-dark;
+  }
+  &__error {
+    color: $error-on-dark;
+  }
+
+  @media (max-width: $stack-bp) {
+    &__grid {
+      grid-template-columns: minmax(0, 1fr);
+      align-items: start;
+    }
+    &__form {
+      max-width: 52rem;
+    }
+  }
+
+  @media (max-width: 576px) {
+    &__input {
+      font-size: 1.6rem;
+    }
+    &__btn {
+      padding: 1rem 1.6rem;
+      font-size: 1.3rem;
     }
   }
 }

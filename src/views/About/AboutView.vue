@@ -1,401 +1,307 @@
 <template>
-  <div>
-    <NavbarComponent @toggle-cart="toggleCart" />
+  <div class="about-page">
+    <!-- Hero -->
+    <header class="about-hero ae-grain">
+      <div class="about-hero__photo" aria-hidden="true"></div>
+      <MusicNotesComponent
+        class="about-hero__notes"
+        :count="7"
+        tone="light"
+        :seed="11"
+        :max-size="28"
+      />
 
-    <!-- Header Section -->
-    <header class="header-about">
-      <div class="header-about__bgc">
-        <h1 class="header-about__heading">IT'S TIME TO KNOW US</h1>
+      <div class="about-hero__inner">
+        <p v-reveal:fade class="ae-eyebrow">About us</p>
+        <h1 v-reveal:words class="about-hero__title ae-display">It's time to <em>know</em> us.</h1>
+        <p v-reveal="200" class="about-hero__lede">
+          Three friends, one garage workshop and a stubborn belief that good equipment should
+          disappear between you and the music.
+        </p>
+
+        <nav
+          v-reveal.stagger="{ delay: 350, stagger: 80 }"
+          class="about-hero__index"
+          aria-label="On this page"
+        >
+          <a
+            v-for="item in index"
+            :key="item.id"
+            :href="`#${item.id}`"
+            class="about-hero__index-link"
+          >
+            <span class="about-hero__index-num">{{ item.num }}</span>
+            {{ item.label }}
+          </a>
+        </nav>
       </div>
     </header>
 
-    <main class="subpage_about">
-      <div class="">
-        <v-container class="story">
-          <v-row justify="center" class="our-story">
-            <v-col cols="11" md="8" lg="6">
-              <h2 class="about__main-title text-center mb-8">Our Story</h2>
-
-              <!-- Story Section -->
-              <v-row class="subpage_about__section__story">
-                <v-col cols="12" md="6" order="md-1" order-sm="1" class="d-flex">
-                  <div class="h-100 w-100">
-                    <v-card elevation="2" class="subpage_about__card h-100">
-                      <div class="d-flex flex-column h-100">
-                        <v-card-title class="subpage_about__title">The Audio Trio</v-card-title>
-                        <v-card-text class="flex-grow-0">
-                          <p class="subpage_about__text">
-                            Founded by three audio enthusiasts - Alex, Jamie, and Taylor - our
-                            journey began in a small garage workshop where we spent countless hours
-                            perfecting our first amplifier design. Each founder brought unique
-                            expertise: Alex mastered acoustics engineering, Jamie specialized in
-                            electronic design, and Taylor brought years of experience in premium
-                            audio retail.
-                          </p>
-                        </v-card-text>
-                      </div>
-                    </v-card>
-                  </div>
-                </v-col>
-                <v-col cols="12" md="6" order="md-1" order-sm="2" class="d-flex">
-                  <div class="h-100 w-100">
-                    <v-img
-                      src="src/assets/img/about.jpg"
-                      alt="Our team"
-                      class="subpage_about__image__story rounded-lg"
-                      cover
-                    ></v-img>
-                  </div>
-                </v-col>
-              </v-row>
-
-              <!-- Sourcing Section -->
-              <v-row class="subpage_about__section__sourcing">
-                <v-col cols="12" md="6" class="d-flex">
-                  <div class="h-100 w-100">
-                    <v-img
-                      src="src/assets/img/about2.jpg"
-                      alt="Premium audio components"
-                      class="subpage_about__image__sourcing rounded-lg"
-                      cover
-                    ></v-img>
-                  </div>
-                </v-col>
-                <v-col cols="12" md="6" class="d-flex">
-                  <div class="h-100 w-100">
-                    <v-card elevation="2" class="subpage_about__card h-100">
-                      <div class="d-flex flex-column h-100">
-                        <v-card-title class="subpage_about__title"
-                          >Our Component Story</v-card-title
-                        >
-                        <v-card-text class="flex-grow-0">
-                          <p class="subpage_about__text">
-                            We source electronic components from the most reputable manufacturers
-                            worldwide. Our pursuit of audio excellence drives us to test and select
-                            only parts that meet our stringent quality standards. Alex maintains
-                            relationships with premium component makers in Japan, Jamie coordinates
-                            with European precision electronics factories, and Taylor ensures we
-                            receive exclusive American-engineered drivers.
-                          </p>
-                        </v-card-text>
-                      </div>
-                    </v-card>
-                  </div>
-                </v-col>
-              </v-row>
-
-              <!-- Philosophy Section -->
-              <v-row class="subpage_about__section__philosophy">
-                <v-col cols="12" md="6" order="md-1" order-sm="1" class="d-flex">
-                  <div class="h-100 w-100">
-                    <v-card elevation="2" class="subpage_about__card h-100">
-                      <div class="d-flex flex-column h-100">
-                        <v-card-title class="subpage_about__title"
-                          >Our Audio Philosophy</v-card-title
-                        >
-                        <v-card-text class="flex-grow-0">
-                          <p class="subpage_about__text">
-                            Through our partnership with renowned acoustic engineer Dr. Marcus Wei,
-                            we've developed proprietary sound processing technologies that preserve
-                            the authentic character of recordings while minimizing distortion and
-                            maximizing clarity across the entire frequency spectrum.
-                          </p>
-                          <p class="subpage_about__text mt-4">
-                            We believe that exceptional audio equipment should disappear between you
-                            and your music, creating an intimate connection with the artist's
-                            vision. Every product we create undergoes extensive listening tests in
-                            various acoustic environments to ensure consistent performance
-                            regardless of your space.
-                          </p>
-                        </v-card-text>
-                      </div>
-                    </v-card>
-                  </div>
-                </v-col>
-                <v-col cols="12" md="6" order="md-1" order-sm="2" class="d-flex">
-                  <div class="h-100 w-100">
-                    <v-img
-                      src="src/assets/img/about3.jpg"
-                      alt="Audio testing studio"
-                      class="subpage_about__image__philosophy rounded-lg"
-                      cover
-                    ></v-img>
-                  </div>
-                </v-col>
-              </v-row>
-            </v-col>
-          </v-row>
-        </v-container>
-
-        <v-container class="team">
-          <!-- Team Section -->
-          <v-col cols="12" md="10" lg="12">
-            <v-row justify="center" class="my-12">
-              <v-col cols="12">
-                <h2 class="text-center mb-8">Meet Our Team</h2>
-              </v-col>
-              <v-col cols="12" sm="8" md="4" lg="3">
-                <v-card class="subpage_about__team-card">
-                  <v-img
-                    src="src/assets/img/team1.jpg"
-                    height="300"
-                    cover
-                    class="subpage_about__team-img"
-                  ></v-img>
-                  <v-card-title class="team-tittle">Alex Martins</v-card-title>
-                  <v-card-subtitle class="team-subtittle">Acoustic Engineer</v-card-subtitle>
-                  <v-card-text class="team-text">
-                    Specializes in speaker design and room acoustics. With 15 years of experience,
-                    Alex ensures our products deliver perfect sound in any environment.
-                  </v-card-text>
-                </v-card>
-              </v-col>
-
-              <v-col cols="12" sm="8" md="4" lg="3">
-                <v-card class="subpage_about__team-card">
-                  <v-img
-                    src="src/assets/img/team3.jpg"
-                    height="300"
-                    cover
-                    class="subpage_about__team-img"
-                  ></v-img>
-                  <v-card-title class="team-tittle">Jamie Chen</v-card-title>
-                  <v-card-subtitle class="team-subtittle">Electronics Designer</v-card-subtitle>
-                  <v-card-text class="team-text">
-                    Creates innovative circuit designs that extract maximum performance from minimal
-                    components. Jamie's minimalist approach results in pure, transparent sound.
-                  </v-card-text>
-                </v-card>
-              </v-col>
-
-              <v-col cols="12" sm="8" md="4" lg="3">
-                <v-card class="subpage_about__team-card">
-                  <v-img
-                    src="src/assets/img/team2.jpg"
-                    height="300"
-                    cover
-                    class="subpage_about__team-img"
-                  ></v-img>
-                  <v-card-title class="team-tittle">Taylor Reed</v-card-title>
-                  <v-card-subtitle class="team-subtittle">Customer Experience</v-card-subtitle>
-                  <v-card-text class="team-text">
-                    Ensures every customer receives personalized support and guidance. Taylor's
-                    extensive product knowledge helps customers find their perfect audio match.
-                  </v-card-text>
-                </v-card>
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-container>
-
-        <v-container class="testimonials">
-          <v-col cols="12" md="10" lg="12">
-            <!-- Testimonials -->
-            <v-row justify="center" class="my-12">
-              <v-col cols="12">
-                <h2 class="text-center mb-8">What Our Customers Say</h2>
-              </v-col>
-
-              <v-col cols="12" sm="10" md="8" lg="10">
-                <v-container>
-                  <div class="testimonials-grid">
-                    <!-- Testimonial 1 -->
-                    <div class="testimonial-card purple-bg">
-                      <div class="testimonial-header">
-                        <div class="testimonial-img">
-                          <v-img
-                            src="src/assets/img/testimonials1.jpg"
-                            width="50"
-                            height="50"
-                            class="rounded-circle border"
-                          ></v-img>
-                        </div>
-                        <div class="testimonial-user">
-                          <h4 class="testimonial-name">Daniel Clifford</h4>
-                          <p class="testimonial-title">Verified Customer</p>
-                        </div>
-                      </div>
-                      <h3 class="testimonial-headline">
-                        The sound quality exceeded my expectations! Every note comes through with
-                        remarkable clarity and power, transforming even the simplest track into an
-                        immersive experience.!
-                      </h3>
-                      <p class="testimonial-text light-text">
-                        " I upgraded my home audio system with their premium speakers and
-                        amplifiers. The clarity, depth, and richness of the sound are phenomenal –
-                        it truly transforms any room into a concert hall. Every note and nuance is
-                        delivered with such precision that listening becomes an immersive, almost
-                        cinematic experience. The robust build and sleek design not only enhance
-                        performance but also add a modern touch to my living space. "
-                      </p>
-                    </div>
-
-                    <!-- Testimonial 2 -->
-                    <div class="testimonial-card dark-grey-bg">
-                      <div class="testimonial-header">
-                        <div class="testimonial-img">
-                          <v-img
-                            src="src/assets/img/testimonials2.jpg"
-                            width="50"
-                            height="50"
-                            class="rounded-circle border"
-                          ></v-img>
-                        </div>
-                        <div class="testimonial-user">
-                          <h4 class="testimonial-name">Jonathan Walters</h4>
-                          <p class="testimonial-title">Verified Customer</p>
-                        </div>
-                      </div>
-                      <h3 class="testimonial-headline">
-                        Exceptional performance and sleek design!
-                      </h3>
-                      <p class="testimonial-text light-text">
-                        " I recently purchased a state-of-the-art wireless speaker from Audio
-                        Electronics. The audio performance is crystal clear and the design is both
-                        modern and elegant. Customer service was top-notch too. "
-                      </p>
-                    </div>
-
-                    <!-- Testimonial 3 -->
-                    <div class="testimonial-card white-bg tall-card">
-                      <div class="testimonial-header">
-                        <div class="testimonial-img">
-                          <v-img
-                            src="src/assets/img/testimonials3.jpg"
-                            width="50"
-                            height="50"
-                            class="rounded-circle border"
-                          ></v-img>
-                        </div>
-                        <div class="testimonial-user">
-                          <h4 class="testimonial-name dark-text">Kira Whittle</h4>
-                          <p class="testimonial-title dark-text">Verified Customer</p>
-                        </div>
-                      </div>
-                      <h3 class="testimonial-headline dark-text">
-                        A game changer for my music experience.
-                      </h3>
-                      <p class="testimonial-text dark-text">
-                        " I was searching for audio equipment that delivers true-to-life sound and
-                        found it here. The products perfectly capture every nuance, rendering each
-                        beat and note with exceptional precision. This has completely transformed my
-                        listening experience, making every moment feel as if I were in the front row
-                        of a live performance. The immersive quality of the sound elevates my
-                        favorite tracks to an entirely new level, revealing details and textures I
-                        never noticed before. Now, every listening session feels like a personal
-                        concert, with every instrument and vocal delivered with stunning clarity and
-                        emotion. "
-                      </p>
-                    </div>
-
-                    <!-- Testimonial 4 -->
-                    <div class="testimonial-card white-bg">
-                      <div class="testimonial-header">
-                        <div class="testimonial-img">
-                          <v-img
-                            src="src/assets/img/testimonials4.jpg"
-                            width="50"
-                            height="50"
-                            class="rounded-circle border"
-                          ></v-img>
-                        </div>
-                        <div class="testimonial-user">
-                          <h4 class="testimonial-name dark-text">Jeanette Harmon</h4>
-                          <p class="testimonial-title dark-text">Verified Customer</p>
-                        </div>
-                      </div>
-                      <h3 class="testimonial-headline dark-text">
-                        Superior sound and stylish equipment.
-                      </h3>
-                      <p class="testimonial-text dark-text">
-                        " From high-fidelity amplifiers to elegantly designed wireless headphones,
-                        Audio Electronics provides products that blend performance with style
-                        perfectly. I’m extremely happy with my purchase. "
-                      </p>
-                    </div>
-
-                    <!-- Testimonial 5 -->
-                    <div class="testimonial-card dark-blue-bg">
-                      <div class="testimonial-header">
-                        <div class="testimonial-img">
-                          <v-img
-                            src="src/assets/img/testimonials5.jpg"
-                            width="50"
-                            height="50"
-                            class="rounded-circle border"
-                          ></v-img>
-                        </div>
-                        <div class="testimonial-user">
-                          <h4 class="testimonial-name">Patrick Abrams</h4>
-                          <p class="testimonial-title">Verified Customer</p>
-                        </div>
-                      </div>
-                      <h3 class="testimonial-headline">
-                        Unmatched clarity and exceptional support. The audio is so crisp and
-                        detailed that it elevates every track to a new level of enjoyment, while the
-                        customer service is responsive and knowledgeable. Their commitment to
-                        quality really sets them apart from the competition.
-                      </h3>
-                      <p class="testimonial-text light-text">
-                        " Their range of audio equipment has completely transformed my listening
-                        experience, bringing an incredible level of detail and emotion to every
-                        song. The engineering behind each product is evident in the flawless
-                        performance, and the support team truly cares about ensuring a seamless
-                        experience for every customer. This combination of top-notch technology and
-                        dedicated service makes all the difference. "
-                      </p>
-                    </div>
-                  </div>
-                </v-container>
-              </v-col>
-            </v-row>
-          </v-col>
-        </v-container>
+    <!-- Story -->
+    <section class="about-story">
+      <div class="about-story__intro">
+        <p v-reveal:fade class="ae-eyebrow">01 — Our story</p>
+        <h2 v-reveal:words class="about-story__heading ae-display">
+          Built by ear, <em>one</em> circuit at a time.
+        </h2>
       </div>
-    </main>
 
-    <FooterComponent />
-    <ShoppingCartComponent v-if="cartVisible" @close="cartVisible = false" />
+      <article id="chapter-trio" class="about-chapter about-chapter--portrait">
+        <figure v-reveal:zoom class="about-chapter__figure">
+          <img
+            src="@/assets/img/about.jpg"
+            alt="A DJ at the decks in a dark studio"
+            loading="lazy"
+          />
+          <figcaption class="about-chapter__caption">Fig. 01 — Where it started</figcaption>
+        </figure>
+        <div v-reveal="120" class="about-chapter__body">
+          <p class="about-chapter__label">Chapter 01</p>
+          <h3 class="about-chapter__title ae-display">The audio <em>trio</em></h3>
+          <p class="about-chapter__text about-chapter__text--lead">
+            Founded by three audio enthusiasts, Alex, Jamie and Taylor, our journey began in a small
+            garage workshop where we spent countless hours perfecting our first amplifier design.
+          </p>
+          <p class="about-chapter__text">
+            Each founder brought something different to the bench: Alex mastered acoustics
+            engineering, Jamie specialised in electronic design, and Taylor brought years of
+            experience in premium audio retail.
+          </p>
+          <dl class="about-chapter__specs">
+            <div v-for="founder in founders" :key="founder.name" class="about-chapter__spec">
+              <dt>{{ founder.name }}</dt>
+              <dd>{{ founder.field }}</dd>
+            </div>
+          </dl>
+        </div>
+      </article>
+
+      <article id="chapter-components" class="about-chapter about-chapter--reverse">
+        <figure v-reveal:zoom class="about-chapter__figure">
+          <img
+            src="@/assets/img/about2.jpg"
+            alt="Vinyl records, instant photos and a paint set on a rug"
+            loading="lazy"
+          />
+          <figcaption class="about-chapter__caption">Fig. 02 — Parts, picked by hand</figcaption>
+        </figure>
+        <div v-reveal="120" class="about-chapter__body">
+          <p class="about-chapter__label">Chapter 02</p>
+          <h3 class="about-chapter__title ae-display">Our component <em>story</em></h3>
+          <p class="about-chapter__text about-chapter__text--lead">
+            We source electronic components from the most reputable manufacturers worldwide, and
+            only parts that pass our own listening and bench tests make it into a product.
+          </p>
+          <dl class="about-chapter__specs about-chapter__specs--table">
+            <div v-for="source in sources" :key="source.region" class="about-chapter__spec">
+              <dt>{{ source.region }}</dt>
+              <dd>{{ source.parts }}</dd>
+              <span class="about-chapter__spec-who">{{ source.who }}</span>
+            </div>
+          </dl>
+        </div>
+      </article>
+
+      <figure v-reveal class="about-quote">
+        <StaffDividerComponent tone="dark" class="about-quote__staff" />
+        <blockquote class="about-quote__text ae-display">
+          Exceptional audio equipment should <em>disappear</em> between you and your music.
+        </blockquote>
+        <figcaption class="about-quote__cite">— The founders’ first rule</figcaption>
+      </figure>
+
+      <article id="chapter-philosophy" class="about-chapter about-chapter--wide">
+        <figure v-reveal:zoom class="about-chapter__figure">
+          <img
+            src="@/assets/img/about3.jpg"
+            alt="A musician playing a lap steel guitar on a wooden box"
+            loading="lazy"
+          />
+          <figcaption class="about-chapter__caption">Fig. 03 — Tested in real rooms</figcaption>
+        </figure>
+        <div v-reveal="120" class="about-chapter__body">
+          <p class="about-chapter__label">Chapter 03</p>
+          <h3 class="about-chapter__title ae-display">Our audio <em>philosophy</em></h3>
+          <p class="about-chapter__text about-chapter__text--lead">
+            Together with acoustic engineer Dr. Marcus Wei we developed sound processing that keeps
+            the authentic character of a recording, with low distortion and clarity across the whole
+            frequency range.
+          </p>
+          <p class="about-chapter__text">
+            Every product goes through long listening sessions in different rooms, from a small flat
+            to a treated studio, so it performs the same way in your space as it did in ours.
+          </p>
+        </div>
+      </article>
+    </section>
+
+    <!-- Team -->
+    <section id="team" class="about-team ae-grain">
+      <div class="about-team__head">
+        <div>
+          <p v-reveal:fade class="ae-eyebrow">02 — The people</p>
+          <h2 v-reveal:words class="about-team__heading ae-display">
+            Three pairs of <em>ears</em>.
+          </h2>
+        </div>
+        <p v-reveal="150" class="about-team__intro">
+          The same three people who soldered the first amplifier still sign off on every product we
+          sell, and still answer your questions.
+        </p>
+      </div>
+
+      <ul v-reveal.stagger="{ stagger: 140 }" class="about-team__grid">
+        <li v-for="(member, i) in team" :key="member.name" class="about-member">
+          <div class="about-member__photo">
+            <img :src="member.image" :alt="`Portrait of ${member.name}`" loading="lazy" />
+            <span class="about-member__no">No. 0{{ i + 1 }}</span>
+          </div>
+          <p class="about-member__role">{{ member.role }}</p>
+          <h3 class="about-member__name ae-display">{{ member.name }}</h3>
+          <p class="about-member__bio">{{ member.bio }}</p>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="listeners" class="about-voices">
+      <MusicNotesComponent :count="9" tone="brass" :seed="23" :min-size="14" :max-size="26" />
+
+      <div class="about-voices__inner">
+        <p v-reveal:fade class="ae-eyebrow">03 — Listeners</p>
+
+        <div class="about-voices__feature-wrap">
+          <figure v-reveal class="about-voices__feature">
+            <blockquote class="about-voices__feature-text ae-display">
+              “{{ featured.text }}”
+            </blockquote>
+            <figcaption class="about-voices__person">
+              <img :src="featured.image" alt="" class="about-voices__avatar" />
+              <span>
+                <span class="about-voices__name">{{ featured.name }}</span>
+                <span class="about-voices__role">{{ featured.title }}</span>
+              </span>
+            </figcaption>
+          </figure>
+          <div v-reveal:zoom="150" class="about-voices__portrait" aria-hidden="true">
+            <img :src="featured.image" alt="" loading="lazy" />
+          </div>
+        </div>
+
+        <div v-reveal.stagger class="about-voices__grid">
+          <figure v-for="item in others" :key="item.name" class="about-voice">
+            <p class="about-voice__headline ae-display">{{ item.headline }}</p>
+            <blockquote class="about-voice__text">{{ item.text }}</blockquote>
+            <figcaption class="about-voices__person">
+              <img :src="item.image" alt="" class="about-voices__avatar" />
+              <span>
+                <span class="about-voices__name">{{ item.name }}</span>
+                <span class="about-voices__role">{{ item.title }}</span>
+              </span>
+            </figcaption>
+          </figure>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
 <script>
-import NavbarComponent from '@/components/NavbarComponent.vue'
-import FooterComponent from '@/components/FooterComponent.vue'
-import ShoppingCartComponent from '@/components/ShoppingCartComponent.vue'
+import MusicNotesComponent from '@/components/decor/MusicNotesComponent.vue'
+import StaffDividerComponent from '@/components/decor/StaffDividerComponent.vue'
+import team1 from '@/assets/img/team1.jpg'
+import team2 from '@/assets/img/team2.jpg'
+import team3 from '@/assets/img/team3.jpg'
+import testimonials1 from '@/assets/img/testimonials1.jpg'
+import testimonials2 from '@/assets/img/testimonials2.jpg'
+import testimonials3 from '@/assets/img/testimonials3.jpg'
+import testimonials4 from '@/assets/img/testimonials4.jpg'
+import testimonials5 from '@/assets/img/testimonials5.jpg'
 
 export default {
   name: 'AboutView',
-  components: {
-    NavbarComponent,
-    FooterComponent,
-    ShoppingCartComponent,
-  },
+  components: { MusicNotesComponent, StaffDividerComponent },
   data() {
     return {
-      cartVisible: false,
+      index: [
+        { id: 'chapter-trio', num: '01', label: 'Our story' },
+        { id: 'team', num: '02', label: 'The people' },
+        { id: 'listeners', num: '03', label: 'Listeners' },
+      ],
+      founders: [
+        { name: 'Alex', field: 'Acoustics' },
+        { name: 'Jamie', field: 'Electronics' },
+        { name: 'Taylor', field: 'Retail' },
+      ],
+      sources: [
+        { region: 'Japan', parts: 'Premium capacitors & components', who: 'Alex' },
+        { region: 'Europe', parts: 'Precision electronics', who: 'Jamie' },
+        { region: 'USA', parts: 'Exclusive drivers', who: 'Taylor' },
+      ],
+      team: [
+        {
+          name: 'Alex Martins',
+          role: 'Acoustic engineer',
+          image: team1,
+          bio: 'Specialises in speaker design and room acoustics. With 15 years of experience, Alex makes sure our products sound right in any room.',
+        },
+        {
+          name: 'Jamie Chen',
+          role: 'Electronics designer',
+          image: team3,
+          bio: 'Draws circuits that get the most out of very few components. Jamie’s minimalist approach is why our amplifiers sound so transparent.',
+        },
+        {
+          name: 'Taylor Reed',
+          role: 'Customer experience',
+          image: team2,
+          bio: 'Makes sure every customer gets personal advice. Taylor knows the catalogue inside out and will help you find your match.',
+        },
+      ],
       testimonials: [
         {
-          name: 'Michael J. Anderson',
-          title: 'Professional Music Producer',
-          text: "After trying countless audio setups over my 20-year career, I've finally found equipment that reproduces sound exactly as I hear it in the studio. The clarity and precision are unmatched.",
+          name: 'Danielle Clifford',
+          title: 'Verified customer',
+          image: testimonials1,
+          text: 'I upgraded my home system with their speakers and amplifiers. It turned my living room into a concert hall: every note and nuance arrives with real precision.',
         },
         {
-          name: 'Sarah Williams',
-          title: 'Audiophile & Collector',
-          text: "The level of detail in their amplifiers is extraordinary. I'm hearing nuances in my favorite albums that I never knew existed. Their customer service is equally impressive - personalized and knowledgeable.",
+          name: 'Jonathan Walters',
+          title: 'Verified customer',
+          image: testimonials2,
+          headline: 'Exceptional performance, sleek design.',
+          text: 'My wireless speaker sounds crystal clear and looks great on the shelf. Customer service was top-notch too.',
         },
         {
-          name: 'Robert Chen',
-          title: 'Home Theater Enthusiast',
-          text: 'My living room has been transformed into an acoustic paradise. The immersive sound creates an experience that rivals any commercial theater. Friends are constantly asking about my setup.',
+          name: 'Kira Whittle',
+          title: 'Verified customer',
+          image: testimonials3,
+          headline: 'A game changer for my listening.',
+          text: 'I’m hearing details and textures in my favourite records I never noticed before. Every session feels like a front-row seat.',
+        },
+        {
+          name: 'Jeanette Harmon',
+          title: 'Verified customer',
+          image: testimonials4,
+          headline: 'Superior sound, stylish kit.',
+          text: 'From the amplifier to the headphones, everything blends performance with style. I’m very happy with my purchase.',
+        },
+        {
+          name: 'Patrick Abrams',
+          title: 'Verified customer',
+          image: testimonials5,
+          headline: 'Clarity, and support that cares.',
+          text: 'The engineering shows in every song, and the support team actually knows what they are talking about.',
         },
       ],
     }
   },
-  methods: {
-    toggleCart() {
-      this.cartVisible = !this.cartVisible
+  computed: {
+    featured() {
+      return this.testimonials[0]
+    },
+    others() {
+      return this.testimonials.slice(1)
     },
   },
 }

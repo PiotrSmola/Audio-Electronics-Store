@@ -1,172 +1,201 @@
 <template>
-  <div>
-    <NavbarComponent @toggle-cart="toggleCart" />
-    <div class="products-body">
-      <header class="header-products">
-        <div class="header-products__bgc">
-          <div class="header-products__body container">
-            <p class="header-products__text">Exclusive Deals on Premium Audio Equipment</p>
-            <h1 class="header-products__heading">Experience Superior Sound</h1>
-            <a class="header-products__link" href="#products">See Our Products</a>
+  <div class="products-body">
+    <header class="header-products ae-grain">
+      <MusicNotesComponent :count="7" tone="brass" :seed="23" :min-size="14" :max-size="28" />
+      <div class="header-products__body">
+        <p class="ae-eyebrow header-products__text">The catalogue · {{ countLabel }} pieces</p>
+        <h1 class="header-products__heading ae-display">
+          <!-- words rise one by one out of a mask (pure CSS, see Products.scss) -->
+          <template v-for="(word, index) in headingWords" :key="word + index">
+            <span
+              class="header-products__word"
+              :class="{ 'header-products__word--accent': index === headingWords.length - 1 }"
+              :style="{ '--word-index': index }"
+              ><span class="header-products__word-inner">{{ word }}</span></span
+            >{{ index < headingWords.length - 1 ? ' ' : '' }}
+          </template>
+        </h1>
+        <p class="header-products__lede">
+          Amplifiers, speakers, headphones and studio gear, picked for how they sound rather than
+          how they look on a spec sheet. Exclusive prices on every piece.
+        </p>
+        <router-link class="header-products__link" :to="{ hash: '#products' }">
+          Browse the collection<span aria-hidden="true">↓</span>
+        </router-link>
+      </div>
+
+      <!-- category index: jumps straight to the filtered catalogue -->
+      <nav class="header-products__index" aria-label="Browse by category">
+        <button
+          v-for="(filter, index) in categoryFilters"
+          :key="filter.label"
+          type="button"
+          class="header-products__index-item"
+          @click="browseCategory(filter.value)"
+        >
+          <span class="header-products__index-number">{{ pad(index + 1) }}</span>
+          <span class="header-products__index-label">{{ filter.label }}</span>
+          <span class="header-products__index-count">{{ pad(filter.count) }}</span>
+        </button>
+      </nav>
+    </header>
+
+    <main class="products" id="products">
+      <div class="products__container">
+        <section class="products__header">
+          <div class="products__header-lead">
+            <p v-appear class="ae-eyebrow">01 — Collection</p>
+            <h2 v-appear class="products__header__title ae-display">
+              Gear for <em>careful</em> listening
+            </h2>
+          </div>
+          <p v-appear class="products__header__subtitle">
+            Find the perfect audio equipment for you. Our collection caters to every audiophile's
+            needs, so you can find the right blend of performance and style for your own setup.
+          </p>
+        </section>
+
+        <div class="products__toolbar">
+          <div class="products__filters" role="group" aria-label="Filter by category">
+            <button
+              v-for="filter in filters"
+              :key="filter.label"
+              type="button"
+              class="products__filter"
+              :class="{ 'is-active': activeCategory === filter.value }"
+              :aria-pressed="activeCategory === filter.value ? 'true' : 'false'"
+              @click="setCategory(filter.value)"
+            >
+              {{ filter.label }}<span class="products__filter-count">{{ filter.count }}</span>
+            </button>
+          </div>
+          <div class="products__sort" role="group" aria-label="Sort products">
+            <span class="products__sort-label">Sort</span>
+            <button
+              v-for="option in sortOptions"
+              :key="option.value"
+              type="button"
+              class="products__sort-option"
+              :class="{ 'is-active': sort === option.value }"
+              :aria-pressed="sort === option.value ? 'true' : 'false'"
+              @click="sort = option.value"
+            >
+              {{ option.label }}
+            </button>
           </div>
         </div>
-      </header>
-      <main class="products" id="products">
-        <div class="products__container">
-          <section class="products__header container">
-            <h1 class="products__header__title">Products</h1>
-            <p class="products__header__subtitle">
-              Find the perfect audio equipment for you. Our extensive collection caters to every
-              audiophile's needs, ensuring that you discover the ideal blend of performance and
-              style for your personal setup.
-            </p>
-          </section>
-          <section class="products__list container">
-            <ProductCardComponent
-              v-for="product in displayedProducts"
-              :key="product.id"
-              :product="product"
-              @add-to-cart="addToCart"
-            />
-          </section>
-          <div
-            class="products__load-more"
-            v-if="!showAllProducts && products.length > initialProductCount"
-          >
-            <button class="see-all-button" @click="showAllProducts = true">See All Products</button>
+
+        <p class="products__count" aria-live="polite">
+          Showing {{ pad(displayedProducts.length) }} / {{ pad(filteredProducts.length) }}
+        </p>
+
+        <!-- re-keyed on filter/sort so the cards deal themselves in again -->
+        <section :key="listKey" class="products__list">
+          <!-- v-appear: cards rise in (staggered) as they scroll into view, incl. "See All" -->
+          <ProductCardComponent
+            v-for="product in displayedProducts"
+            :key="product.id"
+            v-appear="'rise'"
+            :product="product"
+            @add-to-cart="addToCart"
+          />
+        </section>
+
+        <Transition name="load-more">
+          <div v-if="hasMore" class="products__load-more">
+            <button class="see-all-button" @click="showAllProducts = true">
+              See all {{ pad(filteredProducts.length) }} products
+            </button>
           </div>
-        </div>
-      </main>
-    </div>
-    <FooterComponent />
-    <ShoppingCartComponent v-if="cartVisible" @close="cartVisible = false" />
+        </Transition>
+      </div>
+    </main>
   </div>
 </template>
 
 <script>
-import NavbarComponent from '@/components/NavbarComponent.vue'
-import FooterComponent from '@/components/FooterComponent.vue'
-import ShoppingCartComponent from '@/components/ShoppingCartComponent.vue'
 import ProductCardComponent from '@/components/ProductCardComponent.vue'
-import { useCartStore } from '@/stores/cartStore'
+import MusicNotesComponent from '@/components/decor/MusicNotesComponent.vue'
+import { useAddToCart } from '@/composables/useAddToCart'
+import { appearDirective } from '@/composables/useAppear'
+import { prefersReducedMotion } from '@/composables/useMotionPreferences'
+import { products } from '@/data/products'
+import { categoriesOf, categoryOf, pad } from './catalogue'
 
-// Import images using ES modules not using require
-import product1 from '@/assets/img/product1.jpg'
-import product2 from '@/assets/img/product2.jpg'
-import product3 from '@/assets/img/product3.jpg'
-import product4 from '@/assets/img/product4.jpg'
-import product5 from '@/assets/img/product5.jpg'
-import product6 from '@/assets/img/product6.jpg'
-import product7 from '@/assets/img/product7.jpg'
-import product8 from '@/assets/img/product8.jpg'
-import product9 from '@/assets/img/product9.jpg'
+const SORTERS = {
+  featured: null,
+  'price-asc': (a, b) => a.price - b.price,
+  'price-desc': (a, b) => b.price - a.price,
+}
 
 export default {
   name: 'ProductsView',
   components: {
-    NavbarComponent,
-    FooterComponent,
-    ShoppingCartComponent,
     ProductCardComponent,
+    MusicNotesComponent,
+  },
+  directives: {
+    appear: appearDirective,
   },
   data() {
     return {
+      headingWords: ['Experience', 'superior', 'sound.'],
       initialProductCount: 6,
       showAllProducts: false,
-      products: [
-        {
-          id: 1,
-          name: 'Amplifier X100',
-          price: 299.99,
-          imgSrc: product1,
-          description:
-            'High-end audio amplifier with crystal clear sound reproduction and powerful output for audiophiles.',
-        },
-        {
-          id: 2,
-          name: 'Bluetooth Speaker',
-          price: 149.99,
-          imgSrc: product2,
-          description:
-            'Portable speaker with excellent sound quality and long-lasting battery life for your outdoor adventures.',
-        },
-        {
-          id: 3,
-          name: 'Wireless Headphones',
-          price: 199.99,
-          imgSrc: product3,
-          description:
-            'Premium wireless headphones for professionals with noise cancellation and studio-quality sound.',
-        },
-        {
-          id: 4,
-          name: 'Soundbar Pro',
-          price: 249.99,
-          imgSrc: product4,
-          description:
-            'Sleek soundbar that delivers immersive audio experience for your home theater setup.',
-        },
-        {
-          id: 5,
-          name: 'Studio Headphones',
-          price: 349.99,
-          imgSrc: product5,
-          description:
-            'Professional studio headphones with precise sound reproduction for music production.',
-        },
-        {
-          id: 6,
-          name: 'Turntable Classic',
-          price: 179.99,
-          imgSrc: product6,
-          description:
-            'Vintage-inspired turntable with modern technology for vinyl enthusiasts and collectors.',
-        },
-        {
-          id: 7,
-          name: 'Digital Mixer',
-          price: 399.99,
-          imgSrc: product7,
-          description:
-            'Advanced digital mixer with multiple channels and effects for live performances.',
-        },
-        {
-          id: 8,
-          name: 'Bass Speaker',
-          price: 279.99,
-          imgSrc: product8,
-          description:
-            'Powerful bass speaker that adds depth to your music with clear low frequencies. Perfect for parties.',
-        },
-        {
-          id: 9,
-          name: 'DJ Controller',
-          price: 329.99,
-          imgSrc: product9,
-          description:
-            'Professional DJ controller with intuitive controls and seamless integration with popular DJ software.',
-        },
+      activeCategory: null,
+      sort: 'featured',
+      sortOptions: [
+        { value: 'featured', label: 'Featured' },
+        { value: 'price-asc', label: 'Price ↑' },
+        { value: 'price-desc', label: 'Price ↓' },
       ],
-      cartVisible: false,
+      products,
     }
   },
   computed: {
+    countLabel() {
+      return pad(this.products.length)
+    },
+    filters() {
+      return [
+        { label: 'All', value: null, count: this.products.length },
+        ...categoriesOf(this.products).map((c) => ({ ...c, value: c.label })),
+      ]
+    },
+    categoryFilters() {
+      return this.filters.slice(1)
+    },
+    filteredProducts() {
+      const list = this.activeCategory
+        ? this.products.filter((p) => categoryOf(p) === this.activeCategory)
+        : [...this.products]
+      const sorter = SORTERS[this.sort]
+      return sorter ? list.sort(sorter) : list
+    },
     displayedProducts() {
-      if (this.showAllProducts) {
-        return this.products
-      } else {
-        return this.products.slice(0, this.initialProductCount)
-      }
+      if (this.showAllProducts) return this.filteredProducts
+      return this.filteredProducts.slice(0, this.initialProductCount)
+    },
+    hasMore() {
+      return !this.showAllProducts && this.filteredProducts.length > this.initialProductCount
+    },
+    listKey() {
+      return `${this.activeCategory || 'all'}-${this.sort}`
     },
   },
   methods: {
-    addToCart(product) {
-      const cartStore = useCartStore()
-      cartStore.addProduct(product)
-      alert(`Added ${product.name} to cart!`)
+    pad,
+    setCategory(value) {
+      this.activeCategory = value
     },
-    toggleCart() {
-      this.cartVisible = !this.cartVisible
+    browseCategory(value) {
+      this.setCategory(value)
+      document.getElementById('products')?.scrollIntoView({
+        behavior: prefersReducedMotion() ? 'auto' : 'smooth',
+      })
+    },
+    addToCart(product, imageEl) {
+      useAddToCart().addToCart(product, imageEl)
     },
   },
 }

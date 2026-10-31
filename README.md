@@ -124,4 +124,4 @@ This project is licensed under the MIT License.
 - Ensure that all image assets are placed in the correct directories under `src/assets/img/`.
 - The project uses Vuetify for UI components and Material Design Icons (imported via `@mdi/font/css/materialdesignicons.css`).
 - Pinia is used for global state management of the shopping cart.
-- For a multi-page setup with Vue CLI, refer to `vue.config.js`. For Vite, see `vite.config.js`.
+- Build configuration lives in `vite.config.js` (Vuetify components are auto-imported via `vite-plugin-vuetify`).

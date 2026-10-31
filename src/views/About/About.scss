@@ -1,467 +1,777 @@
-@import url('https://fonts.googleapis.com/css2?family=Birthstone&family=Lavishly+Yours&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Birthstone&family=Lavishly+Yours&family=Playwrite+HU:wght@100..400&family=Red+Hat+Text:ital,wght@0,300..700;1,300..700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Birthstone&family=Kumbh+Sans:wght@100..900&family=Lavishly+Yours&family=Playwrite+HU:wght@100..400&family=Red+Hat+Text:ital,wght@0,300..700;1,300..700&display=swap');
-//
-// HEADER ABOUT
-//
-.header-about {
-  &__bgc {
-    height: 80vh;
-    background: url('@/assets/img/aboutBackground.jpg') rgba(0, 0, 0, 0.7);
-    background-blend-mode: darken;
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+// About page. Every rule is scoped under .about-page (this file is loaded globally with the
+// eagerly imported AboutView, so nothing here may leak to other pages).
+@use '@/assets/scss/tokens' as t;
 
-    @media (max-width: 768px) {
-      height: 50vh;
+$gutter: clamp(1.25rem, 5vw, 4rem);
+$max: 1280px;
+
+@mixin wrap {
+  width: 100%;
+  max-width: $max + 2 * 64px;
+  margin-inline: auto;
+  padding-inline: $gutter;
+}
+
+@mixin mono-label($color: t.$brass-dark) {
+  font-family: t.$font-mono;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: $color;
+}
+
+.about-page {
+  overflow-x: clip;
+  background: t.$paper;
+  color: t.$text-on-light;
+
+  // The global `*` reset forces Roboto on every element; let inline children follow their parent.
+  :where(em, span, a, strong) {
+    font-family: inherit;
+  }
+
+  em {
+    font-style: italic;
+  }
+
+  // Italic accent words inside v-reveal:words headings are elements, not text nodes, so the
+  // directive does not split them. Give them their own rise, in step with the words around them.
+  [data-reveal='words'] em {
+    display: inline-block;
+  }
+  [data-reveal='words']:not([data-revealed]) em {
+    opacity: 0;
+    translate: 0 0.35em;
+  }
+  [data-reveal='words'][data-revealed] em {
+    animation: about-em-rise 1s t.$ease-out 0.2s backwards;
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+}
+
+// ==================================================================== HERO
+.about-page .about-hero {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  min-height: min(calc(100svh - 6.5rem), 820px);
+  padding-top: clamp(6rem, 12vw, 9rem);
+  background: t.$ink-2;
+  color: t.$text-on-dark;
+  overflow: hidden;
+
+  &__photo {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background: url('@/assets/img/aboutBackground.jpg') 70% 35% / cover no-repeat;
+    filter: saturate(0.6) contrast(1.05);
+    animation: about-hero-drift 18s t.$ease-out both;
+
+    // Ink washes in from the left so the headline always sits on a calm surface
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, t.$ink-2 0%, rgba(t.$ink-2, 0.92) 32%, rgba(t.$ink-2, 0.35) 75%),
+        linear-gradient(0deg, t.$ink-2 0%, rgba(t.$ink-2, 0) 45%);
     }
+  }
+
+  &__notes {
+    z-index: -1;
+  }
+
+  &__inner {
+    @include wrap;
+    position: relative;
+    z-index: 1;
+    padding-bottom: clamp(3rem, 6vw, 5rem);
+  }
+
+  &__title {
+    margin: 1.5rem 0 1.75rem;
+    max-width: 11ch;
+    font-family: t.$font-display;
+    font-size: clamp(3.2rem, 8.5vw, 7.5rem);
+    font-weight: 400;
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+    color: t.$text-on-dark;
+
+    em {
+      color: t.$brass-light;
+    }
+  }
+
+  &__lede {
+    max-width: 34rem;
+    font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+    line-height: 1.65;
+    color: t.$muted-on-dark;
+  }
+
+  &__index {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2.5rem;
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+    padding-top: 1.25rem;
+    border-top: 1px solid t.$line-on-dark;
+    max-width: 40rem;
+  }
+
+  &__index-link {
+    @include mono-label(t.$text-on-dark);
+    display: inline-flex;
+    gap: 0.6rem;
+    padding: 0.4rem 0;
+    transition: color 0.25s;
+
+    &:hover,
+    &:focus-visible {
+      color: t.$brass-light;
+    }
+  }
+
+  &__index-num {
+    color: t.$brass;
+  }
+}
+
+// =================================================================== STORY
+.about-page .about-story {
+  @include wrap;
+  padding-top: t.$section-pad;
+  padding-bottom: t.$section-pad;
+
+  &__intro {
+    margin-bottom: clamp(3.5rem, 7vw, 6rem);
   }
 
   &__heading {
-    padding: 0 1rem;
-    color: #ffffff;
-    font-size: 4.5rem;
-    font-weight: 700;
-    text-align: center;
-    letter-spacing: 2px;
+    margin-top: 1.25rem;
+    max-width: 14ch;
+    font-family: t.$font-display;
+    font-size: clamp(2.5rem, 5.5vw, 4.75rem);
+    font-weight: 400;
+    line-height: 1.02;
+    letter-spacing: -0.015em;
+    color: t.$text-on-light;
 
-    @media (max-width: 768px) {
-      font-size: 3rem;
+    em {
+      color: t.$brass-dark;
     }
   }
 }
 
-h2 {
-  color: #ffffff;
-}
-
-//
-// ABOUT
-//
-
-.v-row {
-  margin-top: 0 !important;
-}
-.v-container {
-  max-width: 100% !important;
-}
-.subpage_about {
-  background: linear-gradient(135deg, #333333, #410e01);
-  padding-bottom: 0;
-  display: flex;
-  flex-direction: column;
+.about-page .about-chapter {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(1rem, 2.5vw, 2rem);
   align-items: center;
-  justify-content: center;
-  &__main-title {
-    font-size: 3.5rem;
-    font-weight: 600;
-    margin-bottom: 4rem;
+  scroll-margin-top: 6rem;
+
+  & + .about-chapter {
+    margin-top: clamp(5rem, 10vw, 8.5rem);
+  }
+
+  &__figure {
     position: relative;
-
-    &:after {
-      content: '';
-      position: absolute;
-      bottom: -1rem;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 8rem;
-      height: 3px;
-      background-color: #be9c79;
-    }
-  }
-
-  .story,
-  .team,
-  .testimonials {
     margin: 0;
-  }
-
-  // @media (max-width: 768px) {
-  //   .story {
-  //     display: flex;
-  //     flex-direction: column;
-  //     align-items: center;
-  //   }
-  // }
-
-  .team,
-  .testimonials {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  &__section__story {
-    display: flex;
-    align-items: center;
-    align-content: center;
-    flex-direction: row;
-
-    margin-bottom: 2rem;
-
-    @media (max-width: 768px) {
-      margin-bottom: 1rem;
-    }
-  }
-  &__section__sourcing {
-    display: flex;
-    align-items: center;
-    align-content: center;
-    flex-direction: row;
-    margin-bottom: 2rem;
-
-    @media (max-width: 768px) {
-      margin-bottom: 1rem;
-    }
-  }
-  &__section__philosophy {
-    display: flex;
-    align-items: center;
-    align-content: center;
-    flex-direction: row;
-    margin-bottom: 2rem;
-
-    @media (max-width: 768px) {
-      margin-bottom: 1rem;
-    }
-  }
-
-  &__card {
-    display: flex !important;
-    flex-direction: column !important;
-    border-radius: 8px !important;
     overflow: hidden;
-    background-color: #f0f0f0;
-    transition:
-      transform 0.3s ease,
-      box-shadow 0.3s ease;
+    border-radius: t.$radius-sm;
+    background: t.$paper-2;
 
-    &:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+    img {
+      transition:
+        transform 1.2s t.$ease-out,
+        filter 0.6s;
+      filter: saturate(0.85);
+    }
+
+    &:hover img {
+      transform: scale(1.035);
+      filter: saturate(1);
+    }
+  }
+
+  &__caption {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    padding: 0.55rem 0.9rem;
+    background: t.$paper;
+    @include mono-label(t.$muted-on-light);
+    font-size: 0.68rem;
+    border-top-right-radius: t.$radius-sm;
+  }
+
+  &__label {
+    @include mono-label;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+
+    &::after {
+      content: '';
+      flex: 0 0 3rem;
+      height: 1px;
+      background: currentColor;
+      opacity: 0.6;
     }
   }
 
   &__title {
-    font-size: 2.8rem !important;
-    font-family: 'Birthstone', cursive;
-    font-weight: 700;
-    font-style: normal;
-    color: #2c3e50;
-    padding-bottom: 1rem;
-    position: relative;
-    @media (max-width: 768px) {
-      font-size: 1.8rem !important;
-    }
+    margin: 0.9rem 0 1.5rem;
+    font-family: t.$font-display;
+    font-size: clamp(2.1rem, 3.6vw, 3.25rem);
+    font-weight: 400;
+    line-height: 1.05;
+    color: t.$text-on-light;
 
-    &:after {
-      content: '';
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 4rem;
-      height: 2px;
-      background-color: #be9c79;
+    em {
+      color: t.$brass-dark;
     }
   }
 
   &__text {
-    font-size: 1.3rem;
-    line-height: 1.7;
-    font-family: 'Red Hat Text', sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 400;
-    font-style: normal;
-    font-style: normal;
-    color: #333;
+    font-size: 1.05rem;
+    line-height: 1.75;
+    color: t.$muted-on-light;
+    max-width: 34rem;
+
+    & + .about-chapter__text {
+      margin-top: 1rem;
+    }
+
+    &--lead {
+      font-size: clamp(1.15rem, 1.6vw, 1.3rem);
+      line-height: 1.6;
+      color: t.$text-on-light;
+    }
+  }
+
+  &__specs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin: 2rem 0 0;
+    max-width: 34rem;
+    border-top: 1px solid t.$line-on-light;
+
+    dt {
+      font-family: t.$font-display;
+      font-size: 1.35rem;
+      color: t.$text-on-light;
+    }
+    dd {
+      margin: 0.15rem 0 0;
+      @include mono-label(t.$muted-on-light);
+      font-size: 0.7rem;
+    }
+  }
+
+  &__spec {
+    padding: 1rem 1rem 0 0;
+
+    & + .about-chapter__spec {
+      padding-left: 1rem;
+      border-left: 1px solid t.$line-on-light;
+    }
+  }
+
+  // Region / parts / person, read like a parts list
+  &__specs--table {
+    grid-template-columns: 1fr;
+
+    .about-chapter__spec {
+      display: grid;
+      grid-template-columns: 6.5rem 1fr auto;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 0.95rem 0;
+      border-left: 0;
+      border-bottom: 1px solid t.$line-on-light;
+    }
+
+    dd {
+      margin: 0;
+      font-family: t.$font-body;
+      font-size: 1rem;
+      letter-spacing: 0;
+      text-transform: none;
+      color: t.$text-on-light;
+    }
+  }
+
+  &__spec-who {
+    @include mono-label(t.$brass-dark);
+    font-size: 0.68rem;
+  }
+
+  // 01: tall portrait left, text right
+  &--portrait {
+    .about-chapter__figure {
+      grid-column: 1 / 7;
+      aspect-ratio: 4 / 5;
+    }
+    .about-chapter__body {
+      grid-column: 8 / 13;
+    }
+  }
+
+  // 02: text left, landscape image bleeding to the right
+  &--reverse {
+    .about-chapter__figure {
+      grid-column: 6 / 13;
+      grid-row: 1;
+      aspect-ratio: 4 / 3;
+    }
+    .about-chapter__body {
+      grid-column: 1 / 6;
+      grid-row: 1;
+    }
+  }
+
+  // 03: wide plate with the text panel overlapping it
+  &--wide {
+    align-items: start;
+
+    .about-chapter__figure {
+      grid-column: 1 / 13;
+      aspect-ratio: 21 / 9;
+
+      img {
+        object-position: 50% 62%;
+      }
+    }
+    .about-chapter__body {
+      position: relative;
+      grid-column: 6 / 13;
+      margin-top: clamp(-9rem, -10vw, -4rem);
+      padding: clamp(1.75rem, 3.5vw, 3rem);
+      background: t.$paper;
+      border-top-left-radius: t.$radius-sm;
+    }
+    .about-chapter__caption {
+      left: auto;
+      right: 0;
+      top: 0;
+      bottom: auto;
+      border-radius: 0 0 0 t.$radius-sm;
+    }
+  }
+
+  @media (max-width: 900px) {
+    row-gap: 2rem;
+
+    &--portrait,
+    &--reverse,
+    &--wide {
+      .about-chapter__figure,
+      .about-chapter__body {
+        grid-column: 1 / -1;
+        grid-row: auto;
+      }
+    }
+
+    &--portrait .about-chapter__figure {
+      aspect-ratio: 4 / 4.2;
+    }
+
+    &--wide {
+      .about-chapter__figure {
+        aspect-ratio: 4 / 3;
+      }
+      .about-chapter__body {
+        margin: -3rem 1rem 0;
+        padding: 1.5rem;
+      }
+    }
+  }
+
+  @media (max-width: 480px) {
+    &__specs--table .about-chapter__spec {
+      grid-template-columns: 5rem 1fr;
+
+      .about-chapter__spec-who {
+        display: none;
+      }
+    }
+
+    &--wide .about-chapter__body {
+      margin: -2rem 0.5rem 0;
+    }
+  }
+}
+
+// Pull quote between chapters
+.about-page .about-quote {
+  margin: clamp(5rem, 10vw, 8.5rem) auto;
+  max-width: 52rem;
+  text-align: center;
+
+  &__staff {
+    margin-bottom: 2.5rem;
+  }
+
+  &__text {
+    margin: 0;
+    font-family: t.$font-display;
+    font-size: clamp(1.9rem, 4.2vw, 3.4rem);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: t.$text-on-light;
+
+    em {
+      color: t.$brass-dark;
+    }
+  }
+
+  &__cite {
+    margin-top: 1.5rem;
+    @include mono-label(t.$muted-on-light);
+  }
+}
+
+// ==================================================================== TEAM
+.about-page .about-team {
+  position: relative;
+  padding-block: t.$section-pad;
+  background: t.$ink-2;
+  color: t.$text-on-dark;
+  scroll-margin-top: 4rem;
+
+  &__head,
+  &__grid {
+    @include wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  &__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    gap: 2rem clamp(2rem, 6vw, 6rem);
+    align-items: end;
+    margin-bottom: clamp(3rem, 6vw, 5rem);
+
     @media (max-width: 768px) {
-      font-size: 1.1rem;
+      grid-template-columns: 1fr;
     }
   }
 
-  &__image {
-    &__story {
-      height: 450px;
-      border-radius: 8px;
-      transition: transform 0.5s ease;
-      object-fit: cover;
+  &__heading {
+    margin-top: 1.25rem;
+    font-family: t.$font-display;
+    font-size: clamp(2.5rem, 5.5vw, 4.75rem);
+    font-weight: 400;
+    line-height: 1.02;
+    letter-spacing: -0.015em;
+    color: t.$text-on-dark;
 
-      &:hover {
-        transform: scale(1.02);
-      }
-
-      @media (max-width: 768px) {
-        height: 300px;
-      }
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-    }
-
-    &__sourcing {
-      height: 490px;
-      border-radius: 8px;
-      transition: transform 0.5s ease;
-      object-fit: cover;
-
-      &:hover {
-        transform: scale(1.02);
-      }
-
-      @media (max-width: 768px) {
-        height: 300px;
-      }
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-    }
-    &__philosophy {
-      height: 650px;
-      border-radius: 8px;
-      transition: transform 0.5s ease;
-      object-fit: cover;
-
-      &:hover {
-        transform: scale(1.02);
-      }
-
-      @media (max-width: 768px) {
-        height: 300px;
-      }
-
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
+    em {
+      color: t.$brass-light;
     }
   }
 
-  &__team-card {
-    transition:
-      transform 0.3s ease,
-      box-shadow 0.3s ease;
-    border-radius: 8px !important;
+  &__intro {
+    max-width: 28rem;
+    font-size: 1.1rem;
+    line-height: 1.7;
+    color: t.$muted-on-dark;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(1.5rem, 3vw, 3rem);
+    list-style: none;
+    align-items: start;
+
+    // Staggered, contact-sheet rhythm
+    > :nth-child(2) {
+      margin-top: clamp(2rem, 6vw, 5.5rem);
+    }
+
+    @media (max-width: 900px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+
+      > :nth-child(2) {
+        margin-top: 3rem;
+      }
+    }
+
+    @media (max-width: 560px) {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+
+      > :nth-child(2) {
+        margin-top: 0;
+      }
+    }
+  }
+}
+
+.about-page .about-member {
+  &__photo {
+    position: relative;
+    aspect-ratio: 4 / 5;
+
+    @media (max-width: 560px) {
+      aspect-ratio: 1 / 1;
+    }
     overflow: hidden;
-    min-height: 60vh;
-    max-height: 700px;
+    border-radius: t.$radius-sm;
+    background: t.$ink-3;
 
-    &:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15) !important;
+    img {
+      // Warm duotone at rest, full colour on hover
+      filter: grayscale(1) sepia(0.35) contrast(1.05) brightness(0.88);
+      transition:
+        filter 0.8s t.$ease-out,
+        transform 1.2s t.$ease-out;
     }
   }
 
-  .team {
-    background: linear-gradient(135deg, #5d1402, #333333);
-    &-tittle {
-      font-size: 1.7rem;
-      padding-bottom: 0;
-    }
-    &-subtittle {
-      font-size: 1.3rem;
-    }
-    &-text {
-      font-family: 'Kumbh Sans', sans-serif;
-      font-optical-sizing: auto;
-      font-weight: 400;
-      font-style: normal;
-      font-size: 1.2rem;
-      padding: 1.3rem 1.6rem;
+  &:hover &__photo img {
+    filter: none;
+    transform: scale(1.04);
+  }
+
+  &__no {
+    position: absolute;
+    top: 0.9rem;
+    left: 0.9rem;
+    @include mono-label(t.$text-on-dark);
+    font-size: 0.68rem;
+    padding: 0.3rem 0.55rem;
+    background: rgba(t.$ink-2, 0.72);
+    border-radius: 2px;
+  }
+
+  &__role {
+    margin-top: 1.4rem;
+    @include mono-label(t.$brass);
+  }
+
+  &__name {
+    margin: 0.4rem 0 0.8rem;
+    font-family: t.$font-display;
+    font-size: clamp(1.8rem, 2.6vw, 2.3rem);
+    font-weight: 400;
+    line-height: 1.1;
+    color: t.$text-on-dark;
+  }
+
+  &__bio {
+    padding-top: 0.9rem;
+    border-top: 1px solid t.$line-on-dark;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: t.$muted-on-dark;
+  }
+}
+
+// ============================================================ TESTIMONIALS
+.about-page .about-voices {
+  position: relative;
+  padding-block: t.$section-pad;
+  background: t.$paper-2;
+  scroll-margin-top: 4rem;
+
+  &__inner {
+    @include wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  &__feature-wrap {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(14rem, 24vw, 20rem);
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: end;
+    margin: 2rem 0 clamp(3.5rem, 7vw, 6rem);
+
+    @media (max-width: 900px) {
+      grid-template-columns: 1fr;
     }
   }
 
-  &__team-img {
-    transition: transform 0.5s ease;
+  &__feature {
+    margin: 0;
+    max-width: 62rem;
+  }
 
-    &:hover {
-      transform: scale(1.05);
-      overflow: hidden;
+  &__portrait {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: t.$radius-sm;
+    background: t.$paper;
+
+    img {
+      filter: grayscale(1) sepia(0.3) contrast(1.05);
+      transition: filter 0.8s t.$ease-out;
+    }
+    &:hover img {
+      filter: none;
+    }
+
+    @media (max-width: 900px) {
+      display: none;
+    }
+  }
+
+  &__feature-text {
+    margin: 0 0 2rem;
+    font-family: t.$font-display;
+    font-size: clamp(1.8rem, 3.8vw, 3.3rem);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: t.$text-on-light;
+    text-indent: -0.4em;
+  }
+
+  &__person {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  &__avatar {
+    flex: 0 0 auto;
+    width: 44px !important;
+    height: 44px !important;
+    border-radius: 50%;
+    filter: grayscale(1) sepia(0.3);
+  }
+
+  &__name {
+    display: block;
+    font-family: t.$font-display;
+    font-size: 1.15rem;
+    line-height: 1.2;
+    color: t.$text-on-light;
+  }
+
+  &__role {
+    display: block;
+    margin-top: 0.15rem;
+    @include mono-label(t.$muted-on-light);
+    font-size: 0.66rem;
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    border-top: 1px solid rgba(t.$text-on-light, 0.2);
+
+    @media (max-width: 1100px) {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    @media (max-width: 600px) {
+      grid-template-columns: 1fr;
     }
   }
 }
 
-//
-// Testimonials
-//
-.testimonials {
-  background: linear-gradient(135deg, #333333, #5d1402);
-}
+.about-page .about-voice {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 2rem clamp(1.25rem, 2vw, 2rem) 0.5rem;
 
-.testimonials-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-template-rows: repeat(2, auto);
-  gap: 2rem;
+  & + .about-voice {
+    border-left: 1px solid rgba(t.$text-on-light, 0.12);
+  }
+  &:first-child {
+    padding-left: 0;
+  }
 
-  @media (max-width: 1280px) {
-    grid-template-columns: repeat(2, 1fr);
+  &__headline {
+    font-family: t.$font-display;
+    font-size: 1.4rem;
+    line-height: 1.2;
+    color: t.$text-on-light;
+  }
+
+  &__text {
+    flex: 1;
+    margin: 0.9rem 0 1.6rem;
+    font-size: 1rem;
+    line-height: 1.7;
+    color: t.$muted-on-light;
+  }
+
+  @media (max-width: 1100px) {
+    &:nth-child(odd) {
+      padding-left: 0;
+      border-left: 0;
+    }
+    &:nth-child(n + 3) {
+      border-top: 1px solid rgba(t.$text-on-light, 0.12);
+    }
   }
 
   @media (max-width: 600px) {
-    grid-template-columns: 1fr;
-  }
-}
+    padding-left: 0;
+    padding-right: 0;
+    border-left: 0 !important;
 
-.testimonial-card {
-  padding: 2rem;
-  border-radius: 0.8rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-
-  @media (max-width: 768px) {
-    padding: 1.5rem;
-  }
-
-  &.purple-bg {
-    background: #733fc8;
-    color: white;
-    grid-column: span 2;
-    background-repeat: no-repeat;
-    background-position: top right 10%;
-
-    @media (max-width: 600px) {
-      grid-column: span 1;
-    }
-  }
-
-  &.dark-grey-bg {
-    background: #49556b;
-    color: white;
-
-    @media (max-width: 1200px) {
-      grid-column: span 1;
-    }
-  }
-
-  &.white-bg {
-    background: white;
-    color: #49505a;
-
-    &.tall-card {
-      grid-column: 4;
-      grid-row: span 2;
-
-      @media (max-width: 1280px) {
-        grid-column: 2;
-        grid-row: span 2;
-      }
-
-      @media (max-width: 960px) {
-        grid-column: span 2;
-        grid-row: 2;
-      }
-
-      @media (max-width: 600px) {
-        grid-column: span 1;
-      }
-    }
-  }
-
-  &.dark-blue-bg {
-    background: #18202d;
-    color: white;
-    grid-column: span 2;
-
-    @media (max-width: 600px) {
-      grid-column: span 1;
+    & + .about-voice {
+      border-top: 1px solid rgba(t.$text-on-light, 0.12);
     }
   }
 }
 
-.testimonial-header {
-  display: flex;
-  align-items: center;
-  margin-bottom: 1.5rem;
-
-  @media (max-width: 960px) {
-    font-size: 1rem;
+// ================================================================ Keyframes
+@keyframes about-em-rise {
+  from {
+    opacity: 0;
+    translate: 0 0.35em;
+  }
+  to {
+    opacity: 1;
+    translate: 0 0;
   }
 }
 
-.testimonial-img {
-  margin-right: 1rem;
-
-  img {
-    border: 2px solid rgba(255, 255, 255, 0.5);
+@keyframes about-hero-drift {
+  from {
+    transform: scale(1.08);
+  }
+  to {
+    transform: scale(1);
   }
 }
 
-.testimonial-user {
-  display: flex;
-  flex-direction: column;
-}
-
-.testimonial-name {
-  margin: 0;
-  font-size: 1.4rem;
-  font-weight: 500;
-  color: hsl(0, 0%, 90%);
-  @media (max-width: 768px) {
-    font-size: 1.4rem;
+@media (prefers-reduced-motion: reduce) {
+  .about-page {
+    .about-hero__photo,
+    [data-reveal='words'][data-revealed] em {
+      animation: none;
+    }
+    [data-reveal='words']:not([data-revealed]) em {
+      opacity: 1;
+      translate: none;
+    }
+    .about-chapter__figure img,
+    .about-member__photo img {
+      transition: none;
+    }
+    .about-chapter__figure:hover img,
+    .about-member:hover .about-member__photo img {
+      transform: none;
+    }
   }
-
-  &.dark-text {
-    color: #49505a;
-  }
-}
-
-.testimonial-title {
-  margin: 0;
-  font-size: 1.2rem;
-  opacity: 0.5;
-  color: hsl(0, 0%, 90%);
-  @media (max-width: 768px) {
-    font-size: 1.1rem;
-  }
-
-  &.dark-text {
-    color: #49505a;
-  }
-}
-
-.testimonial-headline {
-  font-size: 1.6rem;
-  line-height: 1.4;
-  margin-bottom: 1.5rem;
-  font-weight: 600;
-  color: #f3deff;
-  @media (max-width: 768px) {
-    font-size: 1.35rem;
-  }
-
-  &.dark-text {
-    color: #4b5258;
-  }
-}
-
-.testimonial-text {
-  font-size: 1.2rem;
-  line-height: 1.6;
-  opacity: 0.7;
-
-  @media (max-width: 768px) {
-    font-size: 1.1rem;
-  }
-
-  &.light-text {
-    color: #f3deff;
-  }
-
-  &.dark-text {
-    color: #49505a;
-  }
-}
-
-.border {
-  border: 2px solid rgba(255, 255, 255, 0.5) !important;
 }

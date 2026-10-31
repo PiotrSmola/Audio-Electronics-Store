@@ -1,0 +1,88 @@
+// Global base styles, loaded once from main.js.
+// These rules used to leak globally from ProductCardComponent; they are kept here on
+// purpose so every page keeps its current look (Roboto everywhere, zero default spacing).
+@use 'tokens' as t;
+
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Roboto:wght@300;400;500;700&display=swap');
+
+*,
+button,
+input {
+  margin: 0px;
+  padding: 0px;
+  box-sizing: border-box;
+  font-family: 'Roboto', sans-serif;
+}
+
+// Inline elements take the font of their block (e.g. an italic <em> inside a serif heading)
+:where(em, span, a, strong, b, i, small) {
+  font-family: inherit;
+}
+
+:root {
+  --ae-ink: #{t.$ink};
+  --ae-ink-2: #{t.$ink-2};
+  --ae-ink-3: #{t.$ink-3};
+  --ae-paper: #{t.$paper};
+  --ae-paper-2: #{t.$paper-2};
+  --ae-brass: #{t.$brass};
+  --ae-brass-light: #{t.$brass-light};
+  --ae-brass-dark: #{t.$brass-dark};
+  --ae-oxblood: #{t.$oxblood};
+  --ae-text-on-dark: #{t.$text-on-dark};
+  --ae-muted-on-dark: #{t.$muted-on-dark};
+  --ae-text-on-light: #{t.$text-on-light};
+  --ae-muted-on-light: #{t.$muted-on-light};
+  --ae-font-display: #{t.$font-display};
+  --ae-font-mono: #{t.$font-mono};
+}
+
+// Small monospace label above section headings, e.g. <p class="ae-eyebrow">01 — Services</p>
+.ae-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.8rem;
+  font-family: t.$font-mono;
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: t.$brass;
+
+  &::before {
+    content: '';
+    width: 2.4rem;
+    height: 1px;
+    background: currentColor;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 0.95rem;
+    letter-spacing: 0.14em;
+  }
+}
+
+// Serif display heading shared by sections
+.ae-display {
+  font-family: t.$font-display;
+  font-weight: 400;
+  line-height: 1.05;
+  letter-spacing: -0.01em;
+
+  // The global reset above sets Roboto on every element, including the word spans
+  // created by v-reveal:words, so children must inherit the display font explicitly.
+  * {
+    font-family: inherit;
+  }
+}
+
+// Subtle film-grain texture; add to a section with position: relative
+.ae-grain::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.06;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}

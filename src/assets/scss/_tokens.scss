@@ -1,0 +1,38 @@
+// Design tokens shared by every page. Use with:
+//   @use '@/assets/scss/tokens' as t;
+// The same values are exposed as CSS custom properties (--ae-*) in base.scss.
+
+// Palette: warm analog hi-fi. Dark "chassis", cream "paper", brass accent.
+$ink: #101311; // darkest surface (navbar, footer)
+$ink-2: #17130f; // dark section background
+$ink-3: #221b15; // raised dark surface (cards on dark)
+$paper: #f4eee6; // light section background
+$paper-2: #ebe2d6; // raised light surface / borders on light
+$brass: #be9c79; // primary accent
+$brass-light: #d9bf9f;
+$brass-dark: #8c6a47;
+$oxblood: #410e01; // deep warm contrast, use sparingly
+$text-on-dark: #efe7dc;
+$muted-on-dark: rgba(239, 231, 220, 0.62);
+$text-on-light: #1d1712;
+$muted-on-light: #6b5f53;
+$line-on-dark: rgba(190, 156, 121, 0.22);
+$line-on-light: rgba(29, 23, 18, 0.12);
+
+// Typography
+$font-display: 'DM Serif Display', Georgia, serif; // headings
+$font-body: 'Roboto', sans-serif; // body copy (unchanged)
+$font-mono: 'IBM Plex Mono', ui-monospace, monospace; // small labels, numbers, specs
+
+// Shape and rhythm
+$radius-sm: 4px;
+$radius: 10px;
+$radius-lg: 18px;
+$section-pad: clamp(5rem, 9vw, 9rem);
+$ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+$shadow-soft: 0 18px 40px -22px rgba(16, 19, 17, 0.55);
+$shadow-lift: 0 28px 60px -28px rgba(16, 19, 17, 0.7);
+
+$bp-md: 768px;
+$bp-lg: 1024px;

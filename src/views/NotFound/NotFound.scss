@@ -1,0 +1,327 @@
+@use '@/assets/scss/tokens' as t;
+
+//
+// 404 PAGE — "No signal": a record for the zero, lifted tonearm, flatline readout
+//
+.not-found {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: 82vh;
+  overflow: hidden;
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 38%, rgba(t.$brass, 0.07), transparent 70%), t.$ink-2;
+  color: t.$text-on-dark;
+  isolation: isolate;
+
+  &__body {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    min-width: 0;
+    padding-top: clamp(4rem, 8vw, 7rem);
+    padding-bottom: clamp(4rem, 8vw, 7rem);
+  }
+
+  &__eyebrow {
+    display: flex;
+    justify-content: center;
+
+    @media (max-width: 480px) {
+      font-size: 0.95rem;
+    }
+  }
+
+  &__code {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.04em;
+    margin-top: 1.5rem;
+    font-family: t.$font-display;
+    font-size: clamp(9rem, 26vw, 21rem);
+    line-height: 0.9;
+    color: t.$text-on-dark;
+  }
+
+  &__digit {
+    display: block;
+    font-family: inherit;
+    // optical tweak: the serif 4 sits slightly low against the round record
+    transform: translateY(0.02em);
+  }
+
+  &__copy {
+    display: grid;
+    grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+    gap: 2rem clamp(2rem, 5vw, 5rem);
+    align-items: end;
+    max-width: 1080px;
+    margin: clamp(2.5rem, 5vw, 4rem) auto 0;
+
+    @media (max-width: t.$bp-md) {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  &__heading {
+    &,
+    & * {
+      font-family: t.$font-display; // keeps the v-reveal:words spans serif
+    }
+    font-size: clamp(2.6rem, 4.4vw, 4.2rem);
+    color: t.$text-on-dark;
+
+    em {
+      font-style: italic;
+      color: t.$brass;
+    }
+  }
+
+  &__text {
+    max-width: 42ch;
+    font-size: 1.1rem;
+    font-weight: 300;
+    line-height: 1.65;
+    color: t.$muted-on-dark;
+  }
+
+  &__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+    margin-top: 1.8rem;
+  }
+
+  &__link {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.95rem 1.6rem;
+    border: 1px solid rgba(t.$brass, 0.5);
+    border-radius: t.$radius-sm;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    color: t.$text-on-dark;
+    text-decoration: none;
+    transition:
+      background-color 0.3s,
+      border-color 0.3s,
+      color 0.3s,
+      transform 0.35s t.$ease-out;
+
+    &:hover,
+    &:focus-visible {
+      border-color: t.$brass;
+      color: t.$brass-light;
+    }
+
+    &--primary {
+      background-color: t.$brass;
+      border-color: t.$brass;
+      color: t.$ink;
+
+      &:hover,
+      &:focus-visible {
+        background-color: t.$brass-light;
+        border-color: t.$brass-light;
+        color: t.$ink;
+        transform: translateY(-2px);
+      }
+    }
+
+    &:focus-visible {
+      outline: 2px solid t.$brass;
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 480px) {
+      flex: 1 1 auto;
+      justify-content: center;
+    }
+  }
+}
+
+// The record that stands in for the zero
+.record {
+  position: relative;
+  display: block;
+  width: 0.74em;
+  height: 0.74em;
+  margin: 0 0.06em;
+
+  &__disc {
+    display: block;
+    width: 100%;
+    height: 100%;
+    animation: record-spin 7s linear infinite;
+  }
+
+  &__vinyl {
+    fill: #0b0c0b;
+    stroke: rgba(t.$brass, 0.35);
+    stroke-width: 1;
+  }
+
+  &__groove {
+    fill: none;
+    stroke: rgba(t.$text-on-dark, 0.08);
+    stroke-width: 0.6;
+  }
+
+  // Fixed sheen: light catches the grooves while the disc turns underneath
+  &::after {
+    content: '';
+    position: absolute;
+    inset: 2px;
+    border-radius: 50%;
+    background: conic-gradient(
+      from 20deg,
+      transparent 0deg,
+      rgba(t.$text-on-dark, 0.09) 25deg,
+      transparent 55deg,
+      transparent 180deg,
+      rgba(t.$text-on-dark, 0.06) 205deg,
+      transparent 235deg
+    );
+    -webkit-mask: radial-gradient(circle, transparent 31%, #000 32%);
+    mask: radial-gradient(circle, transparent 31%, #000 32%);
+    pointer-events: none;
+  }
+
+  &__label {
+    fill: t.$brass;
+  }
+
+  &__label-text {
+    font-family: t.$font-mono;
+    font-size: 7px;
+    letter-spacing: 1px;
+    text-anchor: middle;
+    fill: t.$ink-2;
+  }
+
+  &__spindle {
+    fill: t.$ink-2;
+  }
+
+  // Tonearm parked off the record, at rest
+  &__arm {
+    position: absolute;
+    top: -0.06em;
+    right: -0.2em;
+    width: 0.22em;
+    height: 0.58em;
+    overflow: visible;
+    transform-origin: 73% 9%;
+    transform: rotate(-18deg);
+    animation: arm-lift 1.6s t.$ease-out 0.6s both;
+  }
+
+  &__arm-base {
+    fill: t.$ink-3;
+    stroke: rgba(t.$brass, 0.5);
+    stroke-width: 1;
+  }
+
+  &__arm-pivot {
+    fill: t.$brass;
+  }
+
+  &__arm-tube {
+    fill: none;
+    stroke: t.$brass-light;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  &__arm-head {
+    fill: t.$brass;
+    transform: rotate(-30deg);
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+}
+
+@keyframes record-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// The arm swings back off the record: the music has stopped
+@keyframes arm-lift {
+  from {
+    transform: rotate(14deg);
+  }
+  to {
+    transform: rotate(-18deg);
+  }
+}
+
+// Oscilloscope flatline under the numbers
+.flatline {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  max-width: 1080px;
+  margin: clamp(1.5rem, 3vw, 2.5rem) auto 0;
+
+  &__label {
+    flex: none;
+    font-family: t.$font-mono;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: t.$muted-on-dark;
+
+    &--unit {
+      text-transform: none;
+    }
+  }
+
+  &__trace {
+    flex: 1;
+    width: 100%;
+    min-width: 0;
+    height: 28px;
+    overflow: visible;
+  }
+
+  &__base {
+    fill: none;
+    stroke: t.$line-on-dark;
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+  }
+
+  &__blip {
+    fill: none;
+    stroke: t.$brass;
+    stroke-width: 1.4;
+    stroke-linejoin: round;
+    stroke-dasharray: 6 94;
+    stroke-dashoffset: 100;
+    animation: flatline-run 4.5s linear infinite;
+  }
+}
+
+@keyframes flatline-run {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .record__disc,
+  .record__arm,
+  .flatline__blip {
+    animation: none;
+  }
+  .flatline__blip {
+    stroke-dasharray: none;
+    stroke-dashoffset: 0;
+    opacity: 0.6;
+  }
+}
