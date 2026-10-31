@@ -1,0 +1,29 @@
+services:
+  # Production build served by nginx: http://localhost:${APP_PORT:-8080}
+  app:
+    build:
+      context: .
+      target: prod
+    image: audio-electronics-store:latest
+    container_name: audio-electronics-store
+    ports:
+      - '${APP_PORT:-8080}:80'
+    restart: unless-stopped
+
+  # Vite dev server with hot reload: http://localhost:${DEV_PORT:-5173}
+  # Started only with: docker compose --profile dev up dev
+  dev:
+    profiles: ['dev']
+    build:
+      context: .
+      target: dev
+    image: audio-electronics-store:dev
+    container_name: audio-electronics-store-dev
+    ports:
+      - '${DEV_PORT:-5173}:5173'
+    volumes:
+      - .:/app
+      - /app/node_modules
+    environment:
+      # Bind mounts on Windows/macOS don't propagate file events reliably
+      - CHOKIDAR_USEPOLLING=true

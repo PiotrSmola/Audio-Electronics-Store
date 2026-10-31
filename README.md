@@ -45,6 +45,54 @@ npm run dev
 
 ---
 
+## 🐳 Run with Docker
+
+The only requirement is [Docker](https://docs.docker.com/get-docker/) (Docker Desktop on Windows/macOS) with Compose v2. Node.js is not needed.
+
+### Quick start (one script)
+
+The setup script checks that Docker is installed and running, builds the image, starts the container and waits until the app responds.
+
+```bash
+# Linux / macOS / Git Bash
+./scripts/docker-setup.sh
+```
+
+```powershell
+# Windows PowerShell
+.\scripts\docker-setup.ps1
+```
+
+The app is then available at http://localhost:8080.
+
+| Bash                  | PowerShell     | What it does                                          |
+| --------------------- | -------------- | ----------------------------------------------------- |
+| _(no options)_        | _(no options)_ | Production build served by nginx on port 8080         |
+| `--dev`               | `-Dev`         | Vite dev server with hot reload on port 5173          |
+| `--port 3000`         | `-Port 3000`   | Use a different host port                             |
+| `--logs`              | `-Logs`        | Follow container logs                                 |
+| `--stop`              | `-Stop`        | Stop and remove the containers                        |
+
+> If PowerShell blocks the script, run it with
+> `powershell -ExecutionPolicy Bypass -File .\scripts\docker-setup.ps1`.
+
+### Manual commands
+
+```bash
+# Production (nginx) on http://localhost:8080
+docker compose up -d --build app
+
+# Development with hot reload on http://localhost:5173
+docker compose --profile dev up --build dev
+
+# Stop everything
+docker compose --profile dev down
+```
+
+Ports can be changed with the `APP_PORT` and `DEV_PORT` environment variables.
+
+---
+
 ## 📌 How It Works
 
 ### 1️⃣ Routing & Navigation
