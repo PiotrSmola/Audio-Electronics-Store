@@ -1,0 +1,71 @@
+// Motion mixins (no CSS output on their own). Use with:
+//   @use '@/assets/scss/mixins' as mx;
+
+$ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+// Smooth hover lift with a soft glow in the given color. Keeps the element's own colors;
+// only adds movement, shadow and a light sheen sweeping across on hover.
+@mixin hover-lift($glow: rgba(190, 156, 121, 0.45), $lift: 3px, $sheen: true) {
+  position: relative;
+  transition:
+    transform 0.35s $ease-out,
+    box-shadow 0.35s $ease-out,
+    background-color 0.3s,
+    border-color 0.3s,
+    color 0.3s;
+
+  @if $sheen {
+    overflow: hidden;
+    isolation: isolate;
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(
+        110deg,
+        transparent 30%,
+        rgba(255, 255, 255, 0.28) 50%,
+        transparent 70%
+      );
+      transform: translateX(-120%);
+      transition: transform 0.7s $ease-out;
+      pointer-events: none;
+    }
+  }
+
+  &:hover,
+  &:focus-visible {
+    transform: translateY(-$lift);
+    box-shadow:
+      0 10px 24px -8px $glow,
+      0 0 0 1px rgba(255, 255, 255, 0.04);
+    @if $sheen {
+      &::before {
+        transform: translateX(120%);
+      }
+    }
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.98);
+    transition-duration: 0.1s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition:
+      box-shadow 0.2s,
+      background-color 0.2s,
+      color 0.2s;
+    &:hover,
+    &:focus-visible,
+    &:active {
+      transform: none;
+    }
+    @if $sheen {
+      &::before {
+        display: none;
+      }
+    }
+  }
+}
