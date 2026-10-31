@@ -1,59 +1,83 @@
-# 🎵 Audio Electronics Store
+# Audio Electronics Store
 
-🚀 A modern, multi-page Vue application for an audio electronics store.  
-This project provides a fully responsive storefront featuring dynamic product listings, a real-time shopping cart powered by Pinia, and a sleek user interface built with Vuetify.
+A storefront for a fictional London hi-fi shop, built with Vue 3, Vite, Pinia and Vuetify.
+The design is warm and analog, like a record shop: serif headings, monospace labels, brass
+accents, music notes drifting in the background and a 3D vinyl record in the hero.
 
----
-
-## 🌟 Features
-
-- ✅ **Multi-Page Layout:** Separate pages for Home, About, Products, and Contact.
-- ✅ **Responsive Design:** Optimized for desktops, tablets, and smartphones using custom SCSS and media queries.
-- ✅ **Dynamic Shopping Cart:** Real-time cart updates using Pinia for state management.
-- ✅ **Modern UI Components:** Built with Vuetify and Material Design Icons.
-- ✅ **Interactive Testimonials & Product Sections:** Engaging user reviews and product cards with smooth transitions.
-- ✅ **Clean, Modular Code:** Organized structure with reusable components and SCSS for maintainable styling.
+![Home page with the 3D vinyl record in the hero](docs/screenshots/home-hero.jpg)
 
 ---
 
-## 📋 Requirements
+## Features
 
-Before running the project, ensure you have the following installed:
-
-- **Node.js** (v18 or newer) → [Download Node.js](https://nodejs.org/)
-- **npm** (comes with Node.js)
-- **Git** (optional, for cloning the repository)
+- **Five pages:** Home, About, Products (catalogue and product details), Contact and a 404 page.
+- **3D hero:** a three.js vinyl record with an equalizer ring and a particle sound wave. It
+  follows the mouse and scroll, and loads lazily after the page is shown.
+- **Product catalogue:** 9 products with category filters and sorting. Each product has its own
+  page with a gallery, a spec sheet, reviews and related products.
+- **Shopping cart (Pinia):** a slide-in cart drawer. Adding a product makes its photo fly into
+  the cart. Quantities are editable and the cart is saved in `localStorage`.
+- **Search:** a full-screen search overlay with keyboard navigation.
+- **Forms:** a contact form and a newsletter sign-up, both with validation and toast
+  notifications.
+- **Motion:**
+  - elements reveal on scroll and pages transition smoothly;
+  - product cards tilt in 3D;
+  - the Home page has a VU meter and an opening-hours panel with a live "Open now" status.
+- **Accessible motion:** all animations respect `prefers-reduced-motion`.
+- **Responsive:** works from wide desktops down to 320px phones.
 
 ---
 
-## 🚀 How to Run
+## Screenshots
+
+| Home: about                                       | Home: services                                          |
+| ------------------------------------------------- | ------------------------------------------------------- |
+| ![Home about section](docs/screenshots/home-about.jpg) | ![Home services section](docs/screenshots/home-services.jpg) |
+
+| Home: opening hours                                    | Product catalogue                                    |
+| ------------------------------------------------------ | ---------------------------------------------------- |
+| ![Opening hours panel](docs/screenshots/home-hours.jpg) | ![Product catalogue](docs/screenshots/products.jpg) |
+
+| Product details                                           | Spec sheet                                               |
+| --------------------------------------------------------- | -------------------------------------------------------- |
+| ![Product details](docs/screenshots/product-details.jpg) | ![Product spec sheet](docs/screenshots/product-specs.jpg) |
+
+| About                                  | Contact                                    |
+| -------------------------------------- | ------------------------------------------ |
+| ![About page](docs/screenshots/about.jpg) | ![Contact page](docs/screenshots/contact.jpg) |
+
+| 404                                          | Mobile                                                                                                                       |
+| -------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| ![404 page](docs/screenshots/not-found.jpg) | <img src="docs/screenshots/mobile-home.jpg" alt="Home on mobile" width="190"> <img src="docs/screenshots/mobile-products.jpg" alt="Products on mobile" width="190"> |
+
+---
+
+## Tech stack
+
+| Area      | Tools                                                                    |
+| --------- | ------------------------------------------------------------------------ |
+| Framework | Vue 3 (Options API), Vue Router 4, Pinia 3                               |
+| UI        | Vuetify 3 (auto-imported with `vite-plugin-vuetify`), Material Design Icons |
+| 3D        | three.js                                                                 |
+| Styling   | SCSS with shared design tokens                                           |
+| Fonts     | DM Serif Display, Roboto, IBM Plex Mono                                  |
+| Tooling   | Vite 6, ESLint, Prettier                                                 |
+| Hosting   | Docker (nginx), Docker Compose                                           |
+
+---
+
+## Getting started
+
+### Option 1: Docker (recommended)
+
+The only requirement is [Docker](https://docs.docker.com/get-docker/) with Compose v2
+(Docker Desktop on Windows and macOS). You don't need Node.js.
 
 ```bash
-# 1. Clone the repository
-git clone https://github.com/your-username/Audio-Electronics-Store.git
-
-# 2. Navigate into the project folder
+git clone https://github.com/PiotrSmola/Audio-Electronics-Store.git
 cd Audio-Electronics-Store
 
-# 3. Install dependencies
-npm install
-
-# 4. Start the development server
-npm run dev
-```
-#### By default, the app runs on http://localhost:5173.
-
----
-
-## 🐳 Run with Docker
-
-The only requirement is [Docker](https://docs.docker.com/get-docker/) (Docker Desktop on Windows/macOS) with Compose v2. Node.js is not needed.
-
-### Quick start (one script)
-
-The setup script checks that Docker is installed and running, builds the image, starts the container and waits until the app responds.
-
-```bash
 # Linux / macOS / Git Bash
 ./scripts/docker-setup.sh
 ```
@@ -63,65 +87,76 @@ The setup script checks that Docker is installed and running, builds the image, 
 .\scripts\docker-setup.ps1
 ```
 
-The app is then available at http://localhost:8080.
+The script checks that Docker is installed and running, builds the image, starts the
+container and waits until the app responds. The app is then available at
+**http://localhost:8080**.
 
-| Bash                  | PowerShell     | What it does                                          |
-| --------------------- | -------------- | ----------------------------------------------------- |
-| _(no options)_        | _(no options)_ | Production build served by nginx on port 8080         |
-| `--dev`               | `-Dev`         | Vite dev server with hot reload on port 5173          |
-| `--port 3000`         | `-Port 3000`   | Use a different host port                             |
-| `--logs`              | `-Logs`        | Follow container logs                                 |
-| `--stop`              | `-Stop`        | Stop and remove the containers                        |
+| Bash           | PowerShell     | What it does                                    |
+| -------------- | -------------- | ----------------------------------------------- |
+| _(no options)_ | _(no options)_ | Production build served by nginx on port 8080   |
+| `--dev`        | `-Dev`         | Vite dev server with hot reload on port 5173    |
+| `--port 3000`  | `-Port 3000`   | Use a different host port                       |
+| `--logs`       | `-Logs`        | Follow container logs                           |
+| `--stop`       | `-Stop`        | Stop and remove the containers                  |
 
 > If PowerShell blocks the script, run it with
 > `powershell -ExecutionPolicy Bypass -File .\scripts\docker-setup.ps1`.
 
-### Manual commands
+You can also run Docker Compose directly:
 
 ```bash
-# Production (nginx) on http://localhost:8080
-docker compose up -d --build app
-
-# Development with hot reload on http://localhost:5173
-docker compose --profile dev up --build dev
-
-# Stop everything
-docker compose --profile dev down
+docker compose up -d --build app                 # production on http://localhost:8080
+docker compose --profile dev up --build dev      # dev server on http://localhost:5173
+docker compose --profile dev down                # stop everything
 ```
 
 Ports can be changed with the `APP_PORT` and `DEV_PORT` environment variables.
 
----
+### Option 2: Node.js
 
-## 📌 How It Works
+Requires **Node.js 18+** and npm.
 
-### 1️⃣ Routing & Navigation
-The application is structured into multiple pages with Vue Router.  
-Navigation is handled via a responsive Navbar that adapts to mobile devices by switching to a full-screen modal menu.
+```bash
+npm install
+npm run dev        # dev server on http://localhost:5173
+```
 
-### 2️⃣ Dynamic Shopping Cart
-The shopping cart uses Pinia to maintain a global state.  
-Cart updates (addition, quantity changes, removals) are reflected immediately across the application.
-
-### 3️⃣ Responsive Layout & Styling
-The UI is built using Vuetify components, SCSS, and custom media queries to ensure a smooth experience on desktops, tablets, and smartphones.  
-Key sections (Home, About, Products, Contact) are styled with modern gradients, responsive typography, and grid/flex layouts.
-
-### 4️⃣ Interactive Testimonials & Product Sections
-Testimonials and product cards feature smooth transitions and hover effects.  
-Components are designed to be modular and easily maintainable.
+| Script            | What it does                          |
+| ----------------- | ------------------------------------- |
+| `npm run dev`     | Start the Vite dev server             |
+| `npm run build`   | Build for production into `dist/`     |
+| `npm run preview` | Serve the production build locally    |
+| `npm run lint`    | Run ESLint (with `--fix`)             |
+| `npm run format`  | Format `src/` with Prettier           |
 
 ---
 
-## 📄 License
+## Project structure
 
-This project is licensed under the MIT License.
+```text
+src/
+├── App.vue                 Shared layout: navbar, page transitions, footer, cart, toasts
+├── main.js                 App setup (Pinia, router, Vuetify, v-reveal directive)
+├── router/                 Routes, page titles, scroll behaviour, 404
+├── data/products.js        Single source of product data
+├── stores/cartStore.js     Cart state (persisted to localStorage)
+├── components/
+│   ├── NavbarComponent.vue, FooterComponent.vue, ShoppingCartComponent.vue, ToastComponent.vue
+│   ├── ProductCardComponent.vue
+│   ├── HeroSceneComponent.vue + hero/   Lazy-loaded three.js scene
+│   └── decor/              Music notes and staff-line dividers
+├── composables/            Toasts, fly-to-cart, card tilt, entrance animations
+├── directives/reveal.js    Scroll-reveal directive (v-reveal)
+├── views/                  Home, About, Products, Contact, NotFound (each with its SCSS)
+└── assets/
+    ├── img/                Optimized photos
+    └── scss/               Design tokens, base styles, motion, mixins
+docker/nginx.conf           nginx config with SPA fallback
+scripts/                    Docker setup scripts (Bash and PowerShell)
+```
 
 ---
 
-## 📌 Additional Notes
+## License
 
-- Ensure that all image assets are placed in the correct directories under `src/assets/img/`.
-- The project uses Vuetify for UI components and Material Design Icons (imported via `@mdi/font/css/materialdesignicons.css`).
-- Pinia is used for global state management of the shopping cart.
-- Build configuration lives in `vite.config.js` (Vuetify components are auto-imported via `vite-plugin-vuetify`).
+This project is licensed under the [MIT License](LICENSE).
